@@ -1,0 +1,17 @@
+﻿<Project>
+  <Target Name="CoverletGetPathMap"
+          DependsOnTargets="InitializeSourceRootMappedPaths"
+          Returns="@(_LocalTopLevelSourceRoot)"
+          Condition="'$(DeterministicSourcePaths)' == 'true'">
+    <ItemGroup>
+      <_LocalTopLevelSourceRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.NestedRoot)' == ''"/>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ApplyFileVersion" AfterTargets="MinVer">
+    <PropertyGroup>
+      <BUILD_BUILDNUMBER Condition="'$(BUILD_BUILDNUMBER)' == ''">00000</BUILD_BUILDNUMBER>
+      <FileVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch).$(BUILD_BUILDNUMBER)</FileVersion>
+    </PropertyGroup>
+  </Target>
+</Project>
