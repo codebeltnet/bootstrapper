@@ -20,7 +20,7 @@ An implementation of a `console` application.
 
 ## Codebelt.Bootstrapper.Web
 
-An implementation of a `web` application.
+An implementation of a `web` application and the base for webapi, webapp and mvc.
 
 ## Codebelt.Bootstrapper.WebApi
 
