@@ -1,3 +1,4 @@
+using Codebelt.Bootstrapper.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Codebelt.Bootstrapper.WebMvc.App
 {
-    public class Startup : WebMvcStartup
+    public class Startup : WebStartup
     {
         public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {

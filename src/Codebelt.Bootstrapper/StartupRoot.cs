@@ -20,8 +20,16 @@ namespace Codebelt.Bootstrapper
             Environment = environment;
         }
 
+        /// <summary>
+        /// Gets the <see cref="IConfiguration"/> of this instance.
+        /// </summary>
+        /// <value>The <see cref="IConfiguration"/> of this instance.</value>
         protected IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Gets the <see cref="IHostEnvironment"/> of this instance.
+        /// </summary>
+        /// <value>The <see cref="IHostEnvironment"/> of this instance.</value>
         protected IHostEnvironment Environment { get; }
 
         /// <summary>

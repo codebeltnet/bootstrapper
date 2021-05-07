@@ -1,0 +1,11 @@
+﻿Version: 1.0.0
+Availability: NET NET 5.0
+ 
+# New Features
+- ADDED BootstrapperLifetime class in the Codebelt.Bootstrapper namespace that listens for Ctrl+C or SIGTERM and initiates shutdown
+- ADDED HostBuilderExtensions class in the Codebelt.Bootstrapper namespace that consist of extension methods for the IHostBuilder interface: UseBootstrapperLifetime, UseBootstrapperStartup
+- ADDED IStartupFactory interface in the Codebelt.Bootstrapper namespace that provides an interface for initializing services and middleware used by an application
+- ADDED ProgramRoot class in the Codebelt.Bootstrapper namespace that is the base entry point of an application responsible for registering its StartupRoot partner
+- ADDED StartupFactory class in the Codebelt.Bootstrapper namespace that is the default implementation of IStartupFactory
+- ADDED StartupRoot class in the Codebelt.Bootstrapper namespace that provides the base class of a conventional based Startup class
+ 

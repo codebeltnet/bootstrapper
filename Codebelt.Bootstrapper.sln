@@ -5,15 +5,9 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper", "src\Codebelt.Bootstrapper\Codebelt.Bootstrapper.csproj", "{B14D0DBF-E9F8-458C-B45B-54931042F167}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Common", "src\Codebelt.Bootstrapper.Console\Codebelt.Bootstrapper.Common.csproj", "{6CE93B27-64D0-4D7B-BF0A-D3FBCC9E620F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Common", "src\Codebelt.Bootstrapper.Common\Codebelt.Bootstrapper.Common.csproj", "{6CE93B27-64D0-4D7B-BF0A-D3FBCC9E620F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Web", "src\Codebelt.Bootstrapper.Web\Codebelt.Bootstrapper.Web.csproj", "{0A40098D-3820-4290-9939-B74E610EA77F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.WebMvc", "src\Codebelt.Bootstrapper.Web.MvcApp\Codebelt.Bootstrapper.WebMvc.csproj", "{272AF233-4148-4632-9E8B-89630DAB3080}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.WebApp", "src\Codebelt.Bootstrapper.Web.RazorApp\Codebelt.Bootstrapper.WebApp.csproj", "{AD8CAE14-6B1B-43FD-8A27-C585874FC0C7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.WebApi", "src\Codebelt.Bootstrapper.Web.Api\Codebelt.Bootstrapper.WebApi.csproj", "{7BC48CC5-7D5A-4046-BB65-7F2873CCF894}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Common.App", "app\Codebelt.Bootstrapper.Console.App\Codebelt.Bootstrapper.Common.App.csproj", "{7CC75DC6-CF80-4119-9B44-47A7EC9266A0}"
 EndProject
@@ -23,11 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Worke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Web.App", "app\Codebelt.Bootstrapper.Web.App\Codebelt.Bootstrapper.Web.App.csproj", "{FBD6FE71-9A45-4535-88A7-C91267C05276}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.WebApi.App", "app\Codebelt.Bootstrapper.WebApi.App\Codebelt.Bootstrapper.WebApi.App.csproj", "{5247A3BE-AF60-4BD9-AB79-952632D1184C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.WebApi.App", "app\Codebelt.Bootstrapper.WebApi.App\Codebelt.Bootstrapper.WebApi.App.csproj", "{5247A3BE-AF60-4BD9-AB79-952632D1184C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.WebApp.App", "app\Codebelt.Bootstrapper.WebApp.App\Codebelt.Bootstrapper.WebApp.App.csproj", "{F4111595-6908-47C6-9293-EEAC1F4D3127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.WebApp.App", "app\Codebelt.Bootstrapper.WebApp.App\Codebelt.Bootstrapper.WebApp.App.csproj", "{F4111595-6908-47C6-9293-EEAC1F4D3127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.WebMvc.App", "app\Codebelt.Bootstrapper.WebMvc.App\Codebelt.Bootstrapper.WebMvc.App.csproj", "{0E9B237F-3E3F-457B-9046-650A3BD7C002}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.WebMvc.App", "app\Codebelt.Bootstrapper.WebMvc.App\Codebelt.Bootstrapper.WebMvc.App.csproj", "{0E9B237F-3E3F-457B-9046-650A3BD7C002}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,18 +41,6 @@ Global
 		{0A40098D-3820-4290-9939-B74E610EA77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A40098D-3820-4290-9939-B74E610EA77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A40098D-3820-4290-9939-B74E610EA77F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{272AF233-4148-4632-9E8B-89630DAB3080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{272AF233-4148-4632-9E8B-89630DAB3080}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{272AF233-4148-4632-9E8B-89630DAB3080}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{272AF233-4148-4632-9E8B-89630DAB3080}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AD8CAE14-6B1B-43FD-8A27-C585874FC0C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AD8CAE14-6B1B-43FD-8A27-C585874FC0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AD8CAE14-6B1B-43FD-8A27-C585874FC0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AD8CAE14-6B1B-43FD-8A27-C585874FC0C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BC48CC5-7D5A-4046-BB65-7F2873CCF894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BC48CC5-7D5A-4046-BB65-7F2873CCF894}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BC48CC5-7D5A-4046-BB65-7F2873CCF894}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BC48CC5-7D5A-4046-BB65-7F2873CCF894}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CC75DC6-CF80-4119-9B44-47A7EC9266A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7CC75DC6-CF80-4119-9B44-47A7EC9266A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CC75DC6-CF80-4119-9B44-47A7EC9266A0}.Release|Any CPU.ActiveCfg = Release|Any CPU

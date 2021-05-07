@@ -1,3 +1,4 @@
+using Codebelt.Bootstrapper.Web;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,7 @@ using Cuemon.Extensions.Hosting;
 
 namespace Codebelt.Bootstrapper.WebApi.App
 {
-    public class Startup : WebApiStartup
+    public class Startup : WebStartup
     {
         public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {

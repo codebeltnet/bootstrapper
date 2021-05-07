@@ -4,6 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Description>An implementation optimized for worker services that is managed by its host.</Description>
+    <PackageTags>worker-service worker bootstrap bootstrapper host host-builder program startup create-host-builder configure configure-services</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Codebelt.Bootstrapper\Codebelt.Bootstrapper.csproj" />
   </ItemGroup>

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Web.MvcApp\Codebelt.Bootstrapper.WebMvc.csproj" />
+    <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Web\Codebelt.Bootstrapper.Web.csproj" />
   </ItemGroup>
 
 </Project>
