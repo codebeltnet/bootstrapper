@@ -39,7 +39,7 @@ namespace Codebelt.Bootstrapper.Common
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            Task.Run(() =>
+            return Task.Run(() =>
             {
                 try
                 {
@@ -66,8 +66,6 @@ namespace Codebelt.Bootstrapper.Common
                 }
 
             }, cancellationToken);
-
-            return Task.CompletedTask;
         }
 
         /// <summary>
