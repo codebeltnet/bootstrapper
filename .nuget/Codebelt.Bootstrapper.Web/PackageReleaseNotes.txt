@@ -1,0 +1,14 @@
+﻿Version: 1.0.1
+Availability: .NET 5.0, .NET 6.0
+ 
+# ALM
+- ADDED TFM for .NET 6
+- CHANGED Dependencies to latest and greatest with respect to TFM
+ 
+Version: 1.0.0
+Availability: .NET 5.0
+ 
+# New Features
+- ADDED WebProgram class in the Codebelt.Bootstrapper.Web namespace that is the entry point of an application responsible for registering its WebStartup partner
+- ADDED WebStartup class in the Codebelt.Bootstrapper.Web namespace that provides the base class of a conventional based Startup class for web applications
+ 

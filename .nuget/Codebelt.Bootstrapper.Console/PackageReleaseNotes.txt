@@ -1,0 +1,22 @@
+﻿Version: 1.0.1
+Availability: .NET 5.0, .NET 6.0
+ 
+# ALM
+- ADDED TFM for .NET 6
+- CHANGED Dependencies to latest and greatest with respect to TFM
+ 
+# Breaking Changes
+- CHANGED namespace from Codebelt.Bootstrapper.Common to Codebelt.Bootstrapper.Console
+ 
+# Bug Fixes
+- FIXED non-critical bug in the ConsoleHostedService class located in the Codebelt.Bootstrapper.Console namespace
+ 
+Version: 1.0.0
+Availability: .NET 5.0
+ 
+# New Features
+- ADDED ConsoleHostedService class in the Codebelt.Bootstrapper.Common namespace that provides a console application that is managed by its host
+- ADDED ConsoleProgram class in the Codebelt.Bootstrapper.Common namespace that is the base entry point of an application responsible for registering its ConsoleStartup partner
+- ADDED ConsoleStartup interface in the Codebelt.Bootstrapper.Common namespace that provides the base class of a conventional based Startup class for a console application
+- ADDED HostBuilderExtensions class in the Codebelt.Bootstrapper.Common namespace that consist of extension methods for the IHostBuilder interface: UseConsoleStartup
+ 
