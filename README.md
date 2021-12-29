@@ -1,4 +1,4 @@
-# Bootstrapper Framework for Console Apps (NET 5)
+# Bootstrapper Framework for Console Apps (>= .NET 5)
 
 ## Codebelt.Bootstrapper
 
@@ -13,9 +13,9 @@ The core types of this lightweight boostrapper framework optimized for console a
 
 -project types.
 
-Common for all projec types is that they have both `Program.cs` paired with `Startup.cs`. Also, all are implemented using `IHostedService`; this means that for a traditional `console` you have option for graceful shutdown should you require this (cronjob scenarios or similiar).
+Common for all project types is that they have both `Program.cs` paired with `Startup.cs`. Also, all are implemented using `IHostedService`; this means that for a traditional `console` you have option for graceful shutdown should you require this (cronjob scenarios or similar).
 
-## Codebelt.Bootstrapper.Common
+## Codebelt.Bootstrapper.Console
 
 An implementation optimized for `console` applications.
 
@@ -29,4 +29,4 @@ An implementation optimized for `worker` services.
 
 ---
 
-Code with passion; love your code; deliver with pride 👨‍💻️🔥❤️🚀🤘
+Code with passion; love your code; deliver with confidence  👨‍💻️🔥❤️🚀
