@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper.Common
+namespace Codebelt.Bootstrapper.Console
 {
     /// <summary>
     /// Extension methods for the <see cref="IHostBuilder"/>.

@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Codebelt.Bootstrapper.Console</PackageId>
     <Description>An implementation optimized for console applications that is managed by its host.</Description>
     <PackageTags>console console-application cronjob scheduled-task bootstrap bootstrapper host host-builder program startup create-host-builder configure configure-services</PackageTags>
   </PropertyGroup>

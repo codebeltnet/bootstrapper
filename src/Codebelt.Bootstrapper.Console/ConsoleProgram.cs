@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper.Common
+namespace Codebelt.Bootstrapper.Console
 {
     /// <summary>
     /// The base entry point of an application responsible for registering its <see cref="ConsoleStartup"/> partner.

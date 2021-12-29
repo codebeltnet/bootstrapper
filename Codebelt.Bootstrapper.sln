@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper", "src\Codebelt.Bootstrapper\Codebelt.Bootstrapper.csproj", "{B14D0DBF-E9F8-458C-B45B-54931042F167}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Common", "src\Codebelt.Bootstrapper.Common\Codebelt.Bootstrapper.Common.csproj", "{6CE93B27-64D0-4D7B-BF0A-D3FBCC9E620F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Console", "src\Codebelt.Bootstrapper.Console\Codebelt.Bootstrapper.Console.csproj", "{6CE93B27-64D0-4D7B-BF0A-D3FBCC9E620F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Web", "src\Codebelt.Bootstrapper.Web\Codebelt.Bootstrapper.Web.csproj", "{0A40098D-3820-4290-9939-B74E610EA77F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Common.App", "app\Codebelt.Bootstrapper.Console.App\Codebelt.Bootstrapper.Common.App.csproj", "{7CC75DC6-CF80-4119-9B44-47A7EC9266A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Console.App", "app\Codebelt.Bootstrapper.Console.App\Codebelt.Bootstrapper.Console.App.csproj", "{7CC75DC6-CF80-4119-9B44-47A7EC9266A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codebelt.Bootstrapper.Worker", "src\Codebelt.Bootstrapper.Worker\Codebelt.Bootstrapper.Worker.csproj", "{E90730C8-7954-449B-A592-4674FDAAE15A}"
 EndProject

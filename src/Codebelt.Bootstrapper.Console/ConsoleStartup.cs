@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Codebelt.Bootstrapper.Common
+namespace Codebelt.Bootstrapper.Console
 {
     /// <summary>
     /// Provides the base class of a conventional based <c>Startup</c> class for a console application.

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Codebelt.Bootstrapper.Common
+namespace Codebelt.Bootstrapper.Console
 {
     /// <summary>
     /// Provides a console application that is managed by its host.
