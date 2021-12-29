@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Codebelt.Bootstrapper.Common.App
+namespace Codebelt.Bootstrapper.Console.App
 {
     public class Startup : ConsoleStartup
     {

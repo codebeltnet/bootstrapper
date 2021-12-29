@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace Codebelt.Bootstrapper.Common.App
+namespace Codebelt.Bootstrapper.Console.App
 {
     public class Program : ConsoleProgram<Startup>
     {

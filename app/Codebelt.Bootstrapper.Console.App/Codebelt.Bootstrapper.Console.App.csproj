@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Common\Codebelt.Bootstrapper.Common.csproj" />
+    <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Console\Codebelt.Bootstrapper.Console.csproj" />
   </ItemGroup>
 
   <ItemGroup>
