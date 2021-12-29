@@ -27,6 +27,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SignAssembly Condition="'$(TF_BUILD)' == 'true' OR '$(IsMainAuthor)' == 'true'">true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)boostrapper.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(NuGetPackageRoot)' != ''">
