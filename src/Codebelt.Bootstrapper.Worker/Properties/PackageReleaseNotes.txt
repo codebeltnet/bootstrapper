@@ -1,8 +1,0 @@
-﻿Version: 1.0.0
-Availability: NET NET 5.0
- 
-# New Features
-- ADDED HostBuilderExtensions class in the Codebelt.Bootstrapper.Worker namespace that consist of extension methods for the IHostBuilder interface: UseWorkerStartup
-- ADDED WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner
-- ADDED WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application
- 

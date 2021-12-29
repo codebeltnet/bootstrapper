@@ -1,7 +1,0 @@
-﻿Version: 1.0.0
-Availability: NET NET 5.0
- 
-# New Features
-- ADDED WebProgram class in the Codebelt.Bootstrapper.Web namespace that is the entry point of an application responsible for registering its WebStartup partner
-- ADDED WebStartup class in the Codebelt.Bootstrapper.Web namespace that provides the base class of a conventional based Startup class for web applications
- 
