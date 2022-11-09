@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,12 @@ namespace Codebelt.Bootstrapper.Web
     {
         static WebProgram()
         {
-            CreateHostBuilderCallback = args => Host.CreateDefaultBuilder(args)
+            CreateHostBuilderCallback = InitializeCreateHostBuilderCallback();
+        }
+
+        private static Func<string[], IHostBuilder> InitializeCreateHostBuilderCallback()
+        {
+            return args => Host.CreateDefaultBuilder(args)
                 .UseBootstrapperLifetime()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
