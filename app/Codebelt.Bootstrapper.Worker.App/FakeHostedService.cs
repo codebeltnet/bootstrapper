@@ -9,7 +9,7 @@ namespace Codebelt.Bootstrapper.Worker.App
     public class FakeHostedService : BackgroundService
     {
         private readonly ILogger<FakeHostedService> _logger;
-        private bool _gracefulShutdown = false;
+        private bool _gracefulShutdown;
 
         public FakeHostedService(ILogger<FakeHostedService> logger)
         {
