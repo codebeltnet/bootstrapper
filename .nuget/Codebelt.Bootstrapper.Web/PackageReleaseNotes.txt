@@ -1,4 +1,11 @@
-﻿Version: 1.0.1
+﻿Version: 1.1.0
+Availability: .NET 6.0, .NET 7.0
+ 
+# ALM
+- ADDED TFM for .NET 7
+- CHANGED Dependencies to latest and greatest with respect to TFM
+ 
+Version: 1.0.1
 Availability: .NET 5.0, .NET 6.0
  
 # ALM
