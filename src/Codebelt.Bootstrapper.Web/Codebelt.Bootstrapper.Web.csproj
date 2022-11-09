@@ -1,10 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Description>An implementation optimized for web applications that is managed by its host.</Description>
     <PackageTags>web mvc webapp webapi bootstrap bootstrapper host host-builder program startup create-host-builder configure configure-services</PackageTags>
   </PropertyGroup>
@@ -14,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Hosting" Version="6.3.0" />
+    <PackageReference Include="Cuemon.Extensions.Hosting" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
