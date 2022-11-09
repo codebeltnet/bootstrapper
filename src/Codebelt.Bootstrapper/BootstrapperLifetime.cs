@@ -74,17 +74,17 @@ namespace Codebelt.Bootstrapper
             return _hostLifetime.WaitForStartAsync(cancellationToken);
         }
 
-        private void OnApplicationStarted()
+        private static void OnApplicationStarted()
         {
             OnApplicationStartedCallback?.Invoke();
         }
 
-        private void OnApplicationStopped()
+        private static void OnApplicationStopped()
         {
             OnApplicationStoppedCallback?.Invoke();
         }
 
-        private void OnApplicationStopping()
+        private static void OnApplicationStopping()
         {
             OnApplicationStoppingCallback?.Invoke();
         }
