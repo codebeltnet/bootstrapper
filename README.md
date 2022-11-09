@@ -29,4 +29,4 @@ An implementation optimized for `worker` services.
 
 ---
 
-Code with passion; love your code; deliver with confidence  👨‍💻️🔥❤️🚀
+Code with passion; love your code; deliver with confidence  👨‍💻️🔥❤️🚀😎
