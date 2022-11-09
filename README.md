@@ -1,4 +1,4 @@
-# Bootstrapper Framework for Console Apps (>= .NET 5)
+# Bootstrapper Framework for Console Apps (>= .NET 6)
 
 ## Codebelt.Bootstrapper
 
