@@ -12,7 +12,7 @@
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'false' or '$(IsExcluded)' == 'true'">
     <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
-    <Copyright>Copyright © Geekle 2021-2022. All rights reserved.</Copyright>
+    <Copyright>Copyright © Geekle 2021-2023. All rights reserved.</Copyright>
     <Authors>gimlichael</Authors>
     <Company>Geekle</Company>
     <Product>Codebelt - Console Bootstrapper</Product>
@@ -38,7 +38,7 @@
 
   <ItemGroup Condition="'$(IsTestProject)' == 'false' or '$(IsExcluded)' == 'true'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all"/>
-    <PackageReference Include="MinVer" Version="4.2.0" PrivateAssets="all" />
+    <PackageReference Include="MinVer" Version="4.3.0" PrivateAssets="all" />
     <None Include="..\..\.nuget\$(MSBuildProjectName)\icon.png" Pack="true" Visible="false" PackagePath="\" />
     <None Include="..\..\.nuget\$(MSBuildProjectName)\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
@@ -72,6 +72,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="Cuemon.Extensions.Xunit" Version="7.0.0" />
+    <PackageReference Include="Cuemon.Extensions.Xunit" Version="7.1.0" />
   </ItemGroup>
 </Project>
