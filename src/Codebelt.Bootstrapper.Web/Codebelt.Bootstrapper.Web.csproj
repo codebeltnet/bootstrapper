@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cuemon.Extensions.Hosting" Version="7.1.0" />
+    <PackageReference Include="Cuemon.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
