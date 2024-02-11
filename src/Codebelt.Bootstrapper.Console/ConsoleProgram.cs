@@ -22,13 +22,10 @@ namespace Codebelt.Bootstrapper.Console
         /// Creates an <see cref="IHostBuilder"/> used to set up the host.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
-        /// <param name="token">The token to trigger shutdown.</param>
         /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-        protected static void CreateHostBuilder(string[] args, CancellationToken token = default)
+        protected static IHostBuilder CreateHostBuilder(string[] args)
         {
-            ProgramRoot.CreateHostBuilder(args)
-                .Build()
-                .RunAsync(token).GetAwaiter().GetResult(); // although sync. implementation, use Async variant to get cancellation support
+            return ProgramRoot.CreateHostBuilder(args);
         }
     }
 }
