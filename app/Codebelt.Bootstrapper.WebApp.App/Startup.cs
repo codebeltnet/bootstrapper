@@ -19,8 +19,10 @@ namespace Codebelt.Bootstrapper.WebApp.App
             services.AddRazorPages();
         }
 
-        public override void Configure(IApplicationBuilder app, ILogger logger)
+        public override void ConfigurePipeline(IApplicationBuilder app)
         {
+            var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
+
             if (Environment.IsLocalDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -38,7 +38,7 @@ namespace Codebelt.Bootstrapper
         {
             var startup = (TStartup) Activator.CreateInstance(typeof(TStartup), _configuration, _environment);
             startup?.ConfigureServices(_services);
-            services =_services;
+            services = _services;
             return startup;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Codebelt.Bootstrapper.Web
 {
@@ -24,14 +22,6 @@ namespace Codebelt.Bootstrapper.Web
                 .UseBootstrapperLifetime()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureServices(services =>
-                    {
-                        var logger = services.BuildServiceProvider().GetService<ILogger<TStartup>>();
-                        if (logger != null)
-                        {
-                            services.AddSingleton<ILogger>(logger); // we need a non-generic variant of the logger for WebStartup/Startup
-                        }
-                    });
                     webBuilder.UseStartup<TStartup>();
                 });
         }
