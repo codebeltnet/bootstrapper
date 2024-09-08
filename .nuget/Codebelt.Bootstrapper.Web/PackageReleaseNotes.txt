@@ -1,4 +1,14 @@
-﻿Version: 1.2.0
+﻿Version: 2.0.0
+Availability: .NET 6.0 and .NET 8.0
+ 
+# ALM
+- REMOVED TFM for net7.0
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED WebStartup class in the Codebelt.Bootstrapper.Web namespace to provide a new abstraction; ConfigurePipeline(IApplicationBuilder) and removed ILogger parameter from Configure method
+ 
+Version: 1.2.0
 Availability: .NET 6.0, .NET 7.0, .NET 8.0
  
 # ALM
