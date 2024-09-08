@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Codebelt.Bootstrapper.Web
 {
@@ -20,13 +20,17 @@ namespace Codebelt.Bootstrapper.Web
         {
         }
 
-
-
         /// <summary>
-        /// Configures the application.
+        /// Configures the application pipeline.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> for the application to configure.</param>
-        /// <param name="logger">The <see cref="ILogger"/> to write to.</param>
-        public abstract void Configure(IApplicationBuilder app, ILogger logger);
+        public abstract void ConfigurePipeline(IApplicationBuilder app);
+
+        /// <summary>
+        /// Delegates the application pipeline configuration to <see cref="ConfigurePipeline"/>.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/> for the application to configure.</param>
+        /// <remarks>This method is necessary as we rely on built-in convention based bootstrapping (<see cref="WebHostBuilderExtensions.UseStartup{TStartup}(IWebHostBuilder)"/>>).</remarks>
+        public void Configure(IApplicationBuilder app) => ConfigurePipeline(app);
     }
 }
