@@ -36,7 +36,7 @@ namespace Codebelt.Bootstrapper
         /// <returns>A reference to the newly created object of type <see cref="StartupRoot" />.</returns>
         public TStartup CreateInstance<TStartup>(out IServiceCollection services) where TStartup : StartupRoot
         {
-            var startup = (TStartup) Activator.CreateInstance(typeof(TStartup), _configuration, _environment);
+            var startup = (TStartup)Activator.CreateInstance(typeof(TStartup), _configuration, _environment);
             startup?.ConfigureServices(_services);
             services = _services;
             return startup;

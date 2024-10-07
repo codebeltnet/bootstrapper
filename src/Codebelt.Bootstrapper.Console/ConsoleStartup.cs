@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Codebelt.Bootstrapper.Console
 {
@@ -14,17 +15,22 @@ namespace Codebelt.Bootstrapper.Console
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsoleStartup"/> class.
         /// </summary>
-        /// <param name="configuration">The dependency injected <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />.</param>
-        /// <param name="environment">The dependency injected <see cref="T:Microsoft.Extensions.Hosting.IHostEnvironment" />.</param>
+        /// <param name="configuration">The dependency injected <see cref="IConfiguration" />.</param>
+        /// <param name="environment">The dependency injected <see cref="IHostEnvironment" />.</param>
         protected ConsoleStartup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {
         }
 
         /// <summary>
-        /// A convenient method for executing code.
+        /// Provides access to previously registered services.
         /// </summary>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to retrieve services from.</param>
-        /// <param name="logger">The <see cref="ILogger"/> to write to.</param>
-        public abstract void Run(IServiceProvider serviceProvider, ILogger logger);
+        public abstract void UseServices(IServiceProvider serviceProvider);
+
+        /// <summary>
+        /// A convenient method for executing fire-and-forget code.
+        /// </summary>
+        /// <param name="cancellationToken">Indicates that the run has been aborted.</param>
+        public abstract Task RunAsync(CancellationToken cancellationToken);
     }
 }

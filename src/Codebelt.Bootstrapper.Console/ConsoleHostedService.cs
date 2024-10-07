@@ -16,20 +16,19 @@ namespace Codebelt.Bootstrapper.Console
     {
         private readonly IStartupFactory _factory;
         private readonly IHostApplicationLifetime _applicationLifetime;
-        private readonly ILogger<TStartup> _logger;
+        private ILogger<TStartup> _logger = null;
         private bool _ranToCompletion = false;
+        private Task _runAsyncTask = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsoleHostedService{TStartup}"/> class.
         /// </summary>
         /// <param name="factory">The dependency injected <see cref="IStartupFactory"/>.</param>
         /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime"/>.</param>
-        /// <param name="logger">The dependency injected <see cref="ILogger{TCategoryName}"/>.</param>
-        public ConsoleHostedService(IStartupFactory factory, IHostApplicationLifetime applicationLifetime, ILogger<TStartup> logger)
+        public ConsoleHostedService(IStartupFactory factory, IHostApplicationLifetime applicationLifetime)
         {
             _factory = factory;
             _applicationLifetime = applicationLifetime;
-            _logger = logger;
         }
 
         /// <summary>
@@ -39,33 +38,43 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.Run(() =>
+            var startup = _factory.CreateInstance<TStartup>(out var services);
+            var provider = services.BuildServiceProvider();
+
+            _logger = provider.GetRequiredService<ILogger<TStartup>>();
+
+            _runAsyncTask = Task.Run(async () =>
             {
                 try
                 {
-                    var startup = _factory.CreateInstance<TStartup>(out var services);
                     if (startup != null)
                     {
-                        startup.Run(services.BuildServiceProvider(), _logger);
-
-                        _logger.LogInformation("Run completed successfully.");
+                        await Task.Delay(TimeSpan.FromMilliseconds(250), cancellationToken).ConfigureAwait(false); // give time for the host to start and present informational message
+                        startup.UseServices(provider);
+                        _logger.LogInformation("RunAsync started.");
+                        await startup.RunAsync(cancellationToken).ConfigureAwait(false);
                         _ranToCompletion = true;
                     }
                     else
                     {
-                        _logger.LogWarning($"Unable to activate an instance of {typeof(TStartup).FullName}.");
+                        _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", typeof(TStartup).FullName);
                     }
                 }
                 catch (Exception e)
                 {
-                    _logger.LogCritical(e, $"Fatal error occurred while activating {typeof(TStartup).FullName}.");
+                    _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", typeof(TStartup).FullName);
                 }
-                finally
-                {
-                    _applicationLifetime.StopApplication();
-                }
-
             }, cancellationToken);
+
+            StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
+
+            return Task.CompletedTask;
+        }
+
+        private async Task StartWaitForCompletionOfRunAsync()
+        {
+            await _runAsyncTask.ConfigureAwait(false);
+            _applicationLifetime.StopApplication();
         }
 
         /// <summary>
@@ -75,7 +84,15 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (!_ranToCompletion) { _logger.LogInformation("Run ended prematurely."); }
+            if (!_ranToCompletion)
+            {
+                _logger?.LogInformation("RunAsync ended prematurely.");
+            }
+            else
+            {
+                _logger?.LogInformation("RunAsync completed successfully.");
+            }
+
             return Task.CompletedTask;
         }
     }

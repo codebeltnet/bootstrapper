@@ -1,3 +1,4 @@
+![Extensions for AWS Signature Version 4 API by Codebelt](.nuget/Codebelt.Bootstrapper/icon.png)
 # Bootstrapper Framework for Console Apps (>= .NET 6)
 
 ## Codebelt.Bootstrapper
@@ -30,3 +31,11 @@ An implementation optimized for `worker` services.
 ---
 
 Code with passion; love your code; deliver with confidence 👨‍💻️🔥❤️🚀😎
+
+### Contributing to `Bootstrapper Framework for Console Apps`
+[Contributions](.github/CONTRIBUTING.md) are welcome and appreciated.
+
+Feel free to submit issues, feature requests, or pull requests to help improve this library.
+
+### License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.

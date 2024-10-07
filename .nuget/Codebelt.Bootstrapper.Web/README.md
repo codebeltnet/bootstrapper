@@ -16,3 +16,55 @@ An implementation optimized for `web`, `webapi`, `webapp`, `razor`, `mvc` applic
 * [Codebelt.Bootstrapper.Console](https://www.nuget.org/packages/Codebelt.Bootstrapper.Console/) 📦
 * [Codebelt.Bootstrapper.Web](https://www.nuget.org/packages/Codebelt.Bootstrapper.Web/) 📦
 * [Codebelt.Bootstrapper.Worker](https://www.nuget.org/packages/Codebelt.Bootstrapper.Worker/) 📦
+
+### CSharp Example
+
+An example on how to use `Codebelt.Bootstrapper.Web` in C#:
+
+```csharp
+
+// --- Program.cs ---
+
+public class Program : WebProgram<Startup>
+{
+    static async Task Main(string[] args)
+    {
+        await CreateHostBuilder(args)
+            .Build()
+            .RunAsync()
+            .ConfigureAwait(false);
+    }
+}
+
+// --- Startup.cs ---
+
+public class Startup : WebStartup
+{
+    public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
+    {
+    }
+
+    public override void ConfigureServices(IServiceCollection services)
+    {
+    }
+
+    public override void ConfigurePipeline(IApplicationBuilder app)
+    {
+        if (Environment.IsLocalDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGet("/", async context =>
+            {
+                await context.Response.WriteAsync("Hello World!");
+            });
+        });
+    }
+}
+
+```
