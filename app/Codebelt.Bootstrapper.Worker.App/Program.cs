@@ -1,14 +1,15 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace Codebelt.Bootstrapper.Worker.App
 {
     public class Program : WorkerProgram<Startup>
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            CreateHostBuilder(args)
+            await CreateHostBuilder(args)
                 .Build()
-                .Run();
+                .RunAsync().ConfigureAwait(false);
         }
     }
 }

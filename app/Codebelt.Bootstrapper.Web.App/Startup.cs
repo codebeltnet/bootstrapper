@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Codebelt.Bootstrapper.Web.App
 {
@@ -20,8 +19,6 @@ namespace Codebelt.Bootstrapper.Web.App
 
         public override void ConfigurePipeline(IApplicationBuilder app)
         {
-            var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
-
             if (Environment.IsLocalDevelopment())
             {
                 app.UseDeveloperExceptionPage();
