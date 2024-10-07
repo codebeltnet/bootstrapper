@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Cuemon;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,21 +19,27 @@ namespace Codebelt.Bootstrapper.Console.App
         {
         }
 
-        public override void Run(IServiceProvider serviceProvider, ILogger logger)
+        public override void UseServices(IServiceProvider serviceProvider)
         {
+            var logger = serviceProvider.GetRequiredService<ILogger<Startup>>();
+
             BootstrapperLifetime.OnApplicationStartedCallback = () => logger.LogInformation("Started");
             BootstrapperLifetime.OnApplicationStoppingCallback = () =>
             {
                 logger.LogWarning("Stopping and cleaning ..");
-                Thread.Sleep(TimeSpan.FromSeconds(1)); // simulate graceful shutdown
+                Thread.Sleep(TimeSpan.FromSeconds(5)); // simulate graceful shutdown
                 logger.LogWarning(".. done!");
             };
             BootstrapperLifetime.OnApplicationStoppedCallback = () => logger.LogCritical("Stopped");
+        }
 
+        public async override Task RunAsync(CancellationToken cancellationToken)
+        {
             for (int dots = 0; dots <= 5; ++dots)
             {
+                if (cancellationToken.IsCancellationRequested) { return; }
                 System.Console.Write($"\rFire and forget {Generate.FixedString('.', dots)}");
-                Thread.Sleep(500);
+                await Task.Delay(500, cancellationToken).ConfigureAwait(false);
             }
 
             System.Console.WriteLine("\nDone and done!");
