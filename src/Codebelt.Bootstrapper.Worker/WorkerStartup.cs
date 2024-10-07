@@ -12,8 +12,8 @@ namespace Codebelt.Bootstrapper.Worker
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkerStartup"/> class.
         /// </summary>
-        /// <param name="configuration">The dependency injected <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />.</param>
-        /// <param name="environment">The dependency injected <see cref="T:Microsoft.Extensions.Hosting.IHostEnvironment" />.</param>
+        /// <param name="configuration">The dependency injected <see cref="IConfiguration" />.</param>
+        /// <param name="environment">The dependency injected <see cref="IHostEnvironment" />.</param>
         protected WorkerStartup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {
         }
