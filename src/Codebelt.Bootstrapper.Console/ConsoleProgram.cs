@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace Codebelt.Bootstrapper.Console
 {
@@ -23,7 +22,7 @@ namespace Codebelt.Bootstrapper.Console
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-        protected static IHostBuilder CreateHostBuilder(string[] args)
+        protected new static IHostBuilder CreateHostBuilder(string[] args)
         {
             return ProgramRoot.CreateHostBuilder(args);
         }
