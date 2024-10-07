@@ -1,4 +1,11 @@
-﻿Version: 2.0.0
+﻿Version 3.0.0
+Availability: .NET 9 and .NET 8
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+- REMOVED Support for TFM .NET 6 (LTS)
+ 
+Version: 2.0.0
 Availability: .NET 6.0 and .NET 8.0
  
 # ALM
@@ -7,6 +14,12 @@ Availability: .NET 6.0 and .NET 8.0
  
 # Breaking Changes
 - CHANGED WebStartup class in the Codebelt.Bootstrapper.Web namespace to provide a new abstraction; ConfigurePipeline(IApplicationBuilder) and removed ILogger parameter from Configure method
+ 
+Version: 1.3.0
+Availability: .NET 6.0, .NET 7.0, .NET 8.0
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest
  
 Version: 1.2.0
 Availability: .NET 6.0, .NET 7.0, .NET 8.0
