@@ -14,8 +14,8 @@ namespace Codebelt.Bootstrapper.Web
         /// <summary>
         /// Initializes a new instance of the <see cref="WebStartup"/> class.
         /// </summary>
-        /// <param name="configuration">The dependency injected <see cref="T:Microsoft.Extensions.Configuration.IConfiguration" />.</param>
-        /// <param name="environment">The dependency injected <see cref="T:Microsoft.Extensions.Hosting.IHostEnvironment" />.</param>
+        /// <param name="configuration">The dependency injected <see cref="IConfiguration" />.</param>
+        /// <param name="environment">The dependency injected <see cref="IHostEnvironment" />.</param>
         protected WebStartup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {
         }

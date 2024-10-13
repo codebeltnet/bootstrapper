@@ -9,7 +9,8 @@ namespace Codebelt.Bootstrapper.Worker.App
         {
             await CreateHostBuilder(args)
                 .Build()
-                .RunAsync().ConfigureAwait(false);
+                .RunAsync()
+                .ConfigureAwait(false);
         }
     }
 }

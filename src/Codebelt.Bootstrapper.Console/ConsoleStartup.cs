@@ -25,12 +25,15 @@ namespace Codebelt.Bootstrapper.Console
         /// Provides access to previously registered services.
         /// </summary>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to retrieve services from.</param>
-        public abstract void UseServices(IServiceProvider serviceProvider);
+        public virtual void ConfigureConsole(IServiceProvider serviceProvider)
+        {
+        }
 
         /// <summary>
         /// A convenient method for executing fire-and-forget code.
         /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to retrieve services from.</param>
         /// <param name="cancellationToken">Indicates that the run has been aborted.</param>
-        public abstract Task RunAsync(CancellationToken cancellationToken);
+        public abstract Task RunAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken);
     }
 }

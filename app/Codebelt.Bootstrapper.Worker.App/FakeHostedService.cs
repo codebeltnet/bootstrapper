@@ -28,6 +28,7 @@ namespace Codebelt.Bootstrapper.Worker.App
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await this.WaitForApplicationStartedAnnouncementAsync(stoppingToken).ConfigureAwait(false);
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (_gracefulShutdown) { return; }

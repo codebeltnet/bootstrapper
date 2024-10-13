@@ -9,22 +9,16 @@ namespace Codebelt.Bootstrapper.Worker
     /// <seealso cref="ProgramRoot{TStartup}" />
     public class WorkerProgram<TStartup> : ProgramRoot<TStartup> where TStartup : WorkerStartup
     {
-        static WorkerProgram()
-        {
-            CreateHostBuilderCallback = args => Host.CreateDefaultBuilder(args)
-                .UseBootstrapperLifetime()
-                .UseBootstrapperStartup()
-                .UseWorkerStartup<TStartup>();
-        }
-
         /// <summary>
         /// Creates an <see cref="IHostBuilder"/> used to set up the host.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-        protected new static IHostBuilder CreateHostBuilder(string[] args)
+        protected static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return ProgramRoot.CreateHostBuilder(args);
+            return Host.CreateDefaultBuilder(args)
+                .UseBootstrapperLifetime()
+                .UseBootstrapperStartup<TStartup>();
         }
     }
 }

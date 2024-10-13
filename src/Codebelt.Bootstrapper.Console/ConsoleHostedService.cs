@@ -14,21 +14,24 @@ namespace Codebelt.Bootstrapper.Console
     /// <seealso cref="IHostedService" />
     public class ConsoleHostedService<TStartup> : IHostedService where TStartup : ConsoleStartup
     {
-        private readonly IStartupFactory _factory;
+        private readonly IStartupFactory<TStartup> _factory;
         private readonly IHostApplicationLifetime _applicationLifetime;
-        private ILogger<TStartup> _logger = null;
-        private bool _ranToCompletion = false;
-        private Task _runAsyncTask = null;
+        private readonly IServiceProvider _provider;
+        private ILogger<TStartup> _logger;
+        private bool _ranToCompletion;
+        private Task _runAsyncTask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsoleHostedService{TStartup}"/> class.
         /// </summary>
-        /// <param name="factory">The dependency injected <see cref="IStartupFactory"/>.</param>
+        /// <param name="factory">The dependency injected <see cref="IStartupFactory{TStartup}"/>.</param>
         /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime"/>.</param>
-        public ConsoleHostedService(IStartupFactory factory, IHostApplicationLifetime applicationLifetime)
+        /// <param name="provider">The dependency injected <see cref="IServiceProvider"/>.</param>
+        public ConsoleHostedService(IStartupFactory<TStartup> factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider)
         {
             _factory = factory;
             _applicationLifetime = applicationLifetime;
+            _provider = provider;
         }
 
         /// <summary>
@@ -38,10 +41,9 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var startup = _factory.CreateInstance<TStartup>(out var services);
-            var provider = services.BuildServiceProvider();
+            var startup = _factory.Instance;
 
-            _logger = provider.GetRequiredService<ILogger<TStartup>>();
+            _logger = _provider.GetRequiredService<ILogger<TStartup>>();
 
             _runAsyncTask = Task.Run(async () =>
             {
@@ -49,10 +51,12 @@ namespace Codebelt.Bootstrapper.Console
                 {
                     if (startup != null)
                     {
-                        await Task.Delay(TimeSpan.FromMilliseconds(250), cancellationToken).ConfigureAwait(false); // give time for the host to start and present informational message
-                        startup.UseServices(provider);
+                        startup.ConfigureConsole(_provider);
+
+                        await this.WaitForApplicationStartedAnnouncementAsync(cancellationToken).ConfigureAwait(false);
+
                         _logger.LogInformation("RunAsync started.");
-                        await startup.RunAsync(cancellationToken).ConfigureAwait(false);
+                        await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
                         _ranToCompletion = true;
                     }
                     else
