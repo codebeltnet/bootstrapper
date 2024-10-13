@@ -6,40 +6,29 @@ using Microsoft.Extensions.Hosting;
 namespace Codebelt.Bootstrapper
 {
     /// <summary>
-    /// The default implementation of <see cref="IStartupFactory"/>.
+    /// The default implementation of <see cref="IStartupFactory{TStartup}"/>.
     /// </summary>
-    /// <seealso cref="IStartupFactory" />
-    public class StartupFactory : IStartupFactory
+    /// <seealso cref="IStartupFactory{TStartup}" />
+    public class StartupFactory<TStartup> : IStartupFactory<TStartup> where TStartup : StartupRoot
     {
-        private readonly IServiceCollection _services;
-        private readonly IConfiguration _configuration;
-        private readonly IHostEnvironment _environment;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="StartupFactory"/> class.
+        /// Initializes a new instance of the <see cref="StartupFactory{TStartup}"/> class.
         /// </summary>
         /// <param name="services">The dependency injected <see cref="IServiceCollection"/>.</param>
         /// <param name="configuration">The dependency injected <see cref="IConfiguration"/>.</param>
         /// <param name="environment">The dependency injected <see cref="IHostEnvironment"/>.</param>
         public StartupFactory(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
-            _services = services;
-            _configuration = configuration;
-            _environment = environment;
+            var startup = (TStartup)Activator.CreateInstance(typeof(TStartup), configuration, environment);
+            startup?.ConfigureServices(services);
+            Instance = startup;
+
         }
 
         /// <summary>
-        /// Creates an instance of the specified <typeparamref name="TStartup" />.
+        /// Provides access to an instance of the specified <typeparamref name="TStartup" />.
         /// </summary>
-        /// <typeparam name="TStartup">The type to create.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
-        /// <returns>A reference to the newly created object of type <see cref="StartupRoot" />.</returns>
-        public TStartup CreateInstance<TStartup>(out IServiceCollection services) where TStartup : StartupRoot
-        {
-            var startup = (TStartup)Activator.CreateInstance(typeof(TStartup), _configuration, _environment);
-            startup?.ConfigureServices(_services);
-            services = _services;
-            return startup;
-        }
+        /// <value>A reference to the object of type <see cref="StartupRoot"/>.</value>
+        public TStartup Instance { get; }
     }
 }

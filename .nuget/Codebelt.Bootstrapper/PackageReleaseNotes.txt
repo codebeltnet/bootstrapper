@@ -5,6 +5,19 @@ Availability: .NET 9 and .NET 8
 - CHANGED Dependencies to latest and greatest with respect to TFMs
 - REMOVED Support for TFM .NET 6 (LTS)
  
+# Breaking Changes
+- CHANGED UseBootstrapperStartup method on the HostBuilderExtensions class in the Codebelt.Bootstrapper namespace to be generic
+- CHANGED IStartupFactory interface in the Codebelt.Bootstrapper namespace to be generic and reference an instance of TStartup
+- CHANGED ProgramRoot class in the Codebelt.Bootstrapper namespace to have zero members
+- CHANGED StartupFactory class in the Codebelt.Bootstrapper namespace to use generic IStartupFactory<TStartup> interface
+ 
+# New Features
+- ADDED HostedServiceExtensions class in the Codebelt.Bootstrapper namespace that consist of extension methods for the IHostedService interface: WaitForApplicationStartedAnnouncementAsync
+- ADDED HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper namespace that consist of extension methods for the IHostApplicationBuilder interface: UseBootstrapperLifetime
+ 
+# Improvements
+- CHANGED BootstrapperLifetime in the Codebelt.Bootstrapper namespace to support adhering to ConsoleLifetimeOptions
+ 
 Version: 2.0.0
 Availability: .NET 6.0 and .NET 8.0
  

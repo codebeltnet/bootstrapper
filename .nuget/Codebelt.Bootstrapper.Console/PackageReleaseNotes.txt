@@ -10,11 +10,16 @@ Availability: .NET 9 and .NET 8
 - REMOVED ILogger{TStartup} argument from the ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace
  
 # New Features
-- ADDED RunAsync (abstract method) to the ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace
-- ADDED UseServices (abstract method) to the ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace
+- ADDED RunAsync (abstract method) to the ConsoleStartup class in the Codebelt.Bootstrapper.Console namespace
+- ADDED ConfigureConsole (virtual method) to the ConsoleStartup class in the Codebelt.Bootstrapper.Console namespace
+- ADDED HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Console namespace that consist of extension methods for the HostApplicationBuilder class: UseBootstrapperProgram and UseMinimalConsoleProgram
+- ADDED IProgramFactory interface in the Codebelt.Bootstrapper.Console namespace that provides an interface for initializing services and middleware used by an application
+- ADDED MinimalConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace that provides a console application that is managed by its host
+- ADDED MinimalConsoleProgram class in the Codebelt.Bootstrapper.Console namespace that provides the base entry point of an application optimized for console applications
+- ADDED ProgramFactory class in the Codebelt.Bootstrapper.Console namespace that is the default implementation of IProgramFactory
  
 # Improvements
-- CHANGED ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace to provide a better developer experience
+- CHANGED ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace to provide a significantly better developer experience
  
 Version: 2.0.0
 Availability: .NET 6.0 and .NET 8.0

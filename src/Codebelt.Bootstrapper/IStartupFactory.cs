@@ -1,18 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace Codebelt.Bootstrapper
+﻿namespace Codebelt.Bootstrapper
 {
     /// <summary>
     /// Provides an interface for initializing services and middleware used by an application.
     /// </summary>
-    public interface IStartupFactory
+    /// <typeparam name="TStartup">The type to create.</typeparam>
+    public interface IStartupFactory<out TStartup> where TStartup : StartupRoot
     {
         /// <summary>
-        /// Creates an instance of the specified <typeparamref name="TStartup"/>.
+        /// Provides access to an instance of the specified <typeparamref name="TStartup"/>.
         /// </summary>
-        /// <typeparam name="TStartup">The type to create.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>
-        /// <returns>A reference to the newly created object of type <see cref="StartupRoot"/>.</returns>
-        TStartup CreateInstance<TStartup>(out IServiceCollection services) where TStartup : StartupRoot;
+        /// <value>A reference to the object of type <see cref="StartupRoot"/>.</value>
+        TStartup Instance { get; }
     }
 }

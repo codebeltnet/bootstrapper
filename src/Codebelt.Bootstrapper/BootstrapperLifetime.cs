@@ -16,6 +16,7 @@ namespace Codebelt.Bootstrapper
     /// <seealso cref="IHostLifetime" />
     public class BootstrapperLifetime : Disposable, IHostLifetime
     {
+        private readonly ConsoleLifetimeOptions _options;
         private readonly ConsoleLifetime _hostLifetime;
         private readonly IHostApplicationLifetime _applicationLifetime;
 
@@ -48,6 +49,7 @@ namespace Codebelt.Bootstrapper
         {
             _hostLifetime = new ConsoleLifetime(options, environment, applicationLifetime, hostOptions, loggerFactory);
             _applicationLifetime = applicationLifetime;
+            _options = options.Value;
         }
 
         /// <summary>
@@ -68,9 +70,12 @@ namespace Codebelt.Bootstrapper
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task WaitForStartAsync(CancellationToken cancellationToken)
         {
-            _applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
-            _applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
-            _applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
+            if (!_options.SuppressStatusMessages)
+            {
+                _applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
+                _applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
+                _applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
+            }
             return _hostLifetime.WaitForStartAsync(cancellationToken);
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace Codebelt.Bootstrapper.Web
@@ -11,29 +10,19 @@ namespace Codebelt.Bootstrapper.Web
     /// <seealso cref="ProgramRoot{TStartup}" />
     public class WebProgram<TStartup> : ProgramRoot<TStartup> where TStartup : WebStartup
     {
-        static WebProgram()
-        {
-            CreateHostBuilderCallback = InitializeCreateHostBuilderCallback();
-        }
-
-        private static Func<string[], IHostBuilder> InitializeCreateHostBuilderCallback()
-        {
-            return args => Host.CreateDefaultBuilder(args)
-                .UseBootstrapperLifetime()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<TStartup>();
-                });
-        }
-
         /// <summary>
         /// Creates an <see cref="IHostBuilder"/> used to set up the host.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-        protected new static IHostBuilder CreateHostBuilder(string[] args)
+        protected static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return ProgramRoot.CreateHostBuilder(args);
+            return Host.CreateDefaultBuilder(args)
+                .UseBootstrapperLifetime()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<TStartup>();
+                });
         }
     }
 }

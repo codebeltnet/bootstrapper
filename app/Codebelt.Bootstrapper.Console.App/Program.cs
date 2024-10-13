@@ -10,8 +10,9 @@ namespace Codebelt.Bootstrapper.Console.App
         static Task Main(string[] args)
         {
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5)); // simulate cronjob that has exceeded a max. running time
-            return CreateHostBuilder(args)
-                .Build().RunAsync(cts.Token);
+            var builder = CreateHostBuilder(args);
+            var host = builder.Build();
+            return host.RunAsync(cts.Token);
         }
     }
 }
