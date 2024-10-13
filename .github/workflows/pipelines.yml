@@ -1,7 +1,6 @@
 name: Bootstrapper Pipeline
 on:
   pull_request:
-    branches: [main]
     paths-ignore:
       - .github/**
       - .nuget/**
