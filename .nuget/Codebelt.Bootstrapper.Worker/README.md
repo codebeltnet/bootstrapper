@@ -84,3 +84,23 @@ public class FakeHostedService : BackgroundService
 }
 
 ```
+
+And the minimal equivalent example on how to use `Codebelt.Bootstrapper.Worker` in C#:
+
+```csharp
+
+// --- Program.cs ---
+
+public class Program : MinimalWorkerProgram
+{
+    static Task Main(string[] args)
+    {
+        var builder = CreateHostBuilder(args);
+        builder.Services.AddHostedService<FakeHostedService>();
+
+        var host = builder.Build();
+        return host.RunAsync();
+    }
+}
+
+```
