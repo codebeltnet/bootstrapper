@@ -8,20 +8,39 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 This major release is first and foremost focused on ironing out any wrinkles that have been introduced with .NET 9 preview releases so the final release is production ready together with the official launch from Microsoft.
 
+Highlighted features included in this release:
+
+- Support for consistent use of `Minimal` equivalents to all Program/Startup pairs of bootstrapper application roles
+
 ### Added
 
-- RunAsync (abstract method) to the ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace
-- UseServices (abstract method) to the ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace
+- RunAsync (abstract method) to the ConsoleStartup class in the Codebelt.Bootstrapper.Console namespace
+- ConfigureConsole (virtual method) to the ConsoleStartup class in the Codebelt.Bootstrapper.Console namespace
+- HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper namespace that consist of extension methods for the IHostApplicationBuilder interface: UseBootstrapperLifetime
+- HostedServiceExtensions class in the Codebelt.Bootstrapper namespace that consist of extension methods for the IHostedService interface: WaitForApplicationStartedAnnouncementAsync
+- HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Console namespace that consist of extension methods for the HostApplicationBuilder class: UseBootstrapperProgram and UseMinimalConsoleProgram
+- IProgramFactory interface in the Codebelt.Bootstrapper.Console namespace that provides an interface for initializing services and middleware used by an application
+- MinimalConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace that provides a console application that is managed by its host
+- MinimalConsoleProgram class in the Codebelt.Bootstrapper.Console namespace that provides the base entry point of an application optimized for console applications
+- ProgramFactory class in the Codebelt.Bootstrapper.Console namespace that is the default implementation of IProgramFactory
+- MinimalWebProgram class in the Codebelt.Bootstrapper.Web namespace that is the entry point of an application optimized for web applications
+- WebApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Web namespace that consist of extension methods for the WebApplicationBuilder class: UseBootstrapperLifetime
+- MinimalWorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the entry point of an application optimized for worker applications
 
 ### Changed
 
 - Dependencies to latest and greatest with respect to TFM
-- Run (abstract method) from the ConsoleStartup class located in the Codebelt.Bootstrapper.Console namespace (breaking change)
-- ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace to provide a better developer experience
+- ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace to provide a significantly better developer experience
+- BootstrapperLifetime in the Codebelt.Bootstrapper namespace to support adhering to ConsoleLifetimeOptions
+- UseBootstrapperStartup method on the HostBuilderExtensions class in the Codebelt.Bootstrapper namespace to be generic (breaking change)
+- IStartupFactory interface in the Codebelt.Bootstrapper namespace to be generic and reference an instance of TStartup (breaking change)
+- ProgramRoot class in the Codebelt.Bootstrapper namespace to have zero members (breaking change)
+- StartupFactory class in the Codebelt.Bootstrapper namespace to use generic IStartupFactory{TStartup} interface (breaking change)
 
 ### Removed
 
 - Support for TFM .NET 6 (LTS)
+- Run (abstract method) from the ConsoleStartup class located in the Codebelt.Bootstrapper.Console namespace (breaking change)
 - ILogger{TStartup} argument from the ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace (breaking change)
 
 ## [2.0.0] - 2024-09-08
