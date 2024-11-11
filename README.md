@@ -1,5 +1,5 @@
-![Extensions for AWS Signature Version 4 API by Codebelt](.nuget/Codebelt.Bootstrapper/icon.png)
-# Bootstrapper Framework for Console Apps (>= .NET 6)
+![Bootstrapper API by Codebelt](.nuget/Codebelt.Bootstrapper/icon.png)
+# Bootstrapper API by Codebelt
 
 ## Codebelt.Bootstrapper
 
@@ -28,11 +28,19 @@ An implementation optimized for `web`, `webapi`, `webapp`, `razor`, `mvc` applic
 
 An implementation optimized for `worker` services.
 
----
+## 📦 Standalone Packages
 
-Code with passion; love your code; deliver with confidence 👨‍💻️🔥❤️🚀😎
+Provides a focused API for bootstraping your code with Program.cs paired with Startup.cs -OR- using the new `Minimal` equivalent for all project types.
 
-### Contributing to `Bootstrapper Framework for Console Apps`
+|Package|vNext|Stable|Downloads|
+|:--|:-:|:-:|:-:|
+| [Codebelt.Bootstrapper](https://www.nuget.org/packages/Codebelt.Bootstrapper/) | ![vNext](https://img.shields.io/nuget/vpre/Codebelt.Bootstrapper?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Codebelt.Bootstrapper?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Codebelt.Bootstrapper?color=blueviolet&logo=nuget) |
+| [Codebelt.Bootstrapper.Web](https://www.nuget.org/packages/Codebelt.Bootstrapper.Web/) | ![vNext](https://img.shields.io/nuget/vpre/Codebelt.Bootstrapper.Web?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Codebelt.Bootstrapper.Web?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Codebelt.Bootstrapper.Web?color=blueviolet&logo=nuget) |
+| [Codebelt.Bootstrapper.Console](https://www.nuget.org/packages/Codebelt.Bootstrapper.Console/) | ![vNext](https://img.shields.io/nuget/vpre/Codebelt.Bootstrapper.Console?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Codebelt.Bootstrapper.Console?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Codebelt.Bootstrapper.Console?color=blueviolet&logo=nuget) |
+| [Codebelt.Bootstrapper.Worker](https://www.nuget.org/packages/Codebelt.Bootstrapper.Worker/) | ![vNext](https://img.shields.io/nuget/vpre/Codebelt.Bootstrapper.Worker?logo=nuget) | ![Stable](https://img.shields.io/nuget/v/Codebelt.Bootstrapper.Worker?logo=nuget) | ![Downloads](https://img.shields.io/nuget/dt/Codebelt.Bootstrapper.Worker?color=blueviolet&logo=nuget) |
+
+
+### Contributing to `Bootstrapper API by Codebelt`
 [Contributions](.github/CONTRIBUTING.md) are welcome and appreciated.
 
 Feel free to submit issues, feature requests, or pull requests to help improve this library.
