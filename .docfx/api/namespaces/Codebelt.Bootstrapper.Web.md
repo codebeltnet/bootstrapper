@@ -1,8 +1,8 @@
 ﻿---
-uid: Codebelt.Boostrapper.Web
+uid: Codebelt.Bootstrapper.Web
 summary: *content
 ---
-The `Codebelt.Boostrapper.Web` namespace offers an implementation optimized for web applications that is managed by its host.
+The `Codebelt.Bootstrapper.Web` namespace offers an implementation optimized for web applications that is managed by its host.
 
 [!INCLUDE [availability-modern](../../includes/availability-modern.md)]
 
