@@ -1,6 +1,10 @@
 ![Bootstrapper API by Codebelt](.nuget/Codebelt.Bootstrapper/icon.png)
 # Bootstrapper API by Codebelt
 
+[![bootstrapper CI/CD Pipeline](https://github.com/codebeltnet/bootstrapper/actions/workflows/pipelines.yml/badge.svg)](https://github.com/codebeltnet/bootstrapper/actions/workflows/pipelines.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bootstrapper&metric=alert_status)](https://sonarcloud.io/dashboard?id=bootstrapper) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bootstrapper&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bootstrapper) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=bootstrapper&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=bootstrapper) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=bootstrapper&metric=security_rating)](https://sonarcloud.io/dashboard?id=bootstrapper) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/codebeltnet/bootstrapper/badge)](https://scorecard.dev/viewer/?uri=github.com/codebeltnet/bootstrapper)
+
+An open-source family of assemblies (MIT license) that provide a uniform and consistent way of bootstraping your code with Program.cs paired with Startup.cs -OR- using the new `Minimal` equivalent for all project types.
+
 ## Codebelt.Bootstrapper
 
 The core types of this lightweight boostrapper framework optimized for console apps, providing a uniform and consistent implementation of:
