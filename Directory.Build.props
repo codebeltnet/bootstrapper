@@ -73,6 +73,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <PackageReference Include="Codebelt.Extensions.Xunit" />
+    <PackageReference Include="Codebelt.Extensions.Xunit.App" />
   </ItemGroup>
 </Project>
