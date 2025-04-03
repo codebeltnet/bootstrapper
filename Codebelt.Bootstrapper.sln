@@ -39,6 +39,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.Minim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.MinimalWorker.App", "app\Codebelt.Bootstrapper.MinimalWorker.App\Codebelt.Bootstrapper.MinimalWorker.App.csproj", "{E87D127B-4CD1-4009-962E-EEF70A522C13}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.Tests", "test\Codebelt.Bootstrapper.Tests\Codebelt.Bootstrapper.Tests.csproj", "{CC656409-7479-4553-8E9B-0854801E1590}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codebelt.Bootstrapper.FunctionalTests", "test\Codebelt.Bootstrapper.FunctionalTests\Codebelt.Bootstrapper.FunctionalTests.csproj", "{8970491F-E0BD-489D-AA7E-617A67C2E39F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +115,14 @@ Global
 		{E87D127B-4CD1-4009-962E-EEF70A522C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E87D127B-4CD1-4009-962E-EEF70A522C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E87D127B-4CD1-4009-962E-EEF70A522C13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC656409-7479-4553-8E9B-0854801E1590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC656409-7479-4553-8E9B-0854801E1590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC656409-7479-4553-8E9B-0854801E1590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC656409-7479-4553-8E9B-0854801E1590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8970491F-E0BD-489D-AA7E-617A67C2E39F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8970491F-E0BD-489D-AA7E-617A67C2E39F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8970491F-E0BD-489D-AA7E-617A67C2E39F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8970491F-E0BD-489D-AA7E-617A67C2E39F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +144,8 @@ Global
 		{3C43A01F-51E7-4166-91D5-E2088E68F4E5} = {28409021-5670-4008-9061-DBAAA0FC4DA6}
 		{497AD6CD-1E7E-4B4D-ACE5-CDD005A14F96} = {28409021-5670-4008-9061-DBAAA0FC4DA6}
 		{E87D127B-4CD1-4009-962E-EEF70A522C13} = {28409021-5670-4008-9061-DBAAA0FC4DA6}
+		{CC656409-7479-4553-8E9B-0854801E1590} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{8970491F-E0BD-489D-AA7E-617A67C2E39F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72FB037E-3629-4CDB-812E-D577A3D4FD26}
