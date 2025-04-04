@@ -22,7 +22,7 @@ namespace Codebelt.Bootstrapper
         {
             var timeToWait = TimeSpan.FromMilliseconds(50);
             var started = false;
-            BootstrapperLifetime.OnApplicationStartedCallback += () =>
+            BootstrapperLifetime.OnApplicationStartedCallback = () =>
             {
                 Thread.Sleep(timeToWait);
             };

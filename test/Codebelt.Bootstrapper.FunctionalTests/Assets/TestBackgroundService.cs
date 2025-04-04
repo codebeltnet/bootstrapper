@@ -14,8 +14,6 @@ namespace Codebelt.Bootstrapper.Assets
         public TestBackgroundService(ILogger<TestBackgroundService> logger)
         {
             _logger = logger;
-
-            BootstrapperLifetime.OnApplicationStartedCallback += () => logger.LogInformation("TestBackgroundService started");
         }
 
         public TimeSpan Elapsed { get; private set; } = TimeSpan.Zero;

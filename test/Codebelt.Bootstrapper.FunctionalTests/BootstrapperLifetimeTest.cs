@@ -17,9 +17,9 @@ namespace Codebelt.Bootstrapper
 
         public BootstrapperLifetimeTest(ITestOutputHelper output) : base(output)
         {
-            BootstrapperLifetime.OnApplicationStartedCallback += () => { _started = true; };
-            BootstrapperLifetime.OnApplicationStoppingCallback += () => { _stopping = true; };
-            BootstrapperLifetime.OnApplicationStoppedCallback += () => { _stopped = true; };
+            BootstrapperLifetime.OnApplicationStartedCallback = () => { _started = true; };
+            BootstrapperLifetime.OnApplicationStoppingCallback = () => { _stopping = true; };
+            BootstrapperLifetime.OnApplicationStoppedCallback = () => { _stopped = true; };
         }
 
         [Fact]
