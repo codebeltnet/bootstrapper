@@ -11,24 +11,23 @@ namespace Codebelt.Bootstrapper.Worker.App
         private readonly ILogger<FakeHostedService> _logger;
         private bool _gracefulShutdown;
 
-        public FakeHostedService(ILogger<FakeHostedService> logger)
+        public FakeHostedService(ILogger<FakeHostedService> logger, IHostLifetimeEvents events)
         {
             _logger = logger;
 
-            BootstrapperLifetime.OnApplicationStartedCallback = () => logger.LogInformation("Started");
-            BootstrapperLifetime.OnApplicationStoppingCallback = () =>
+            events.OnApplicationStartedCallback = () => logger.LogInformation("Started");
+            events.OnApplicationStoppingCallback = () =>
             {
                 _gracefulShutdown = true;
                 logger.LogWarning("Stopping and cleaning ..");
                 Thread.Sleep(TimeSpan.FromSeconds(5)); // simulate graceful shutdown
                 logger.LogWarning(".. done!");
             };
-            BootstrapperLifetime.OnApplicationStoppedCallback = () => logger.LogCritical("Stopped");
+            events.OnApplicationStoppedCallback = () => logger.LogCritical("Stopped");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await this.WaitForApplicationStartedAnnouncementAsync(stoppingToken).ConfigureAwait(false);
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (_gracefulShutdown) { return; }
