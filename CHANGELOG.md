@@ -4,6 +4,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [4.0.0] - TBD
+
+This major release revisits and refines some of the earlier design decisions to offer a more consistent and flexible API. It also brings forward improvements to reliability and maintainability.
+
+### Added
+
+- IHostLifetimeEvents interface in the Codebelt.Bootstrapper namespace that provides a convenient way to be notified of host lifetime events
+
+### Changed
+
+- BootstrapperLifetime class in the Codebelt.Bootstrapper namespace to implement IHostLifetimeEvents and hereby removing static equivalents (breaking change)
+- UseBootstrapperStartup method on the HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper namespace to extend IHostApplicationBuilder instead of HostApplicationBuilder (breaking change)
+- UseBootstrapperProgram method on the HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Console namespace to extend IHostApplicationBuilder instead of HostApplicationBuilder (breaking change)
+- UseMinimalConsoleProgram method on the HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Console namespace to extend IHostApplicationBuilder instead of HostApplicationBuilder (breaking change)
+
+### Removed
+
+- HostedServiceExtensions class in the Codebelt.Bootstrapper namespace (breaking change)
+
+### Fixed
+
+- BootstrapperLifetime class in the Codebelt.Bootstrapper namespace to disregard SuppressStatusMessages and always assign callbacks to members of IHostLifetimeEvents
+
 ## [3.0.1] - 2025-01-31
 
 This is a service update that primarily focuses on package dependencies and minor improvements.
