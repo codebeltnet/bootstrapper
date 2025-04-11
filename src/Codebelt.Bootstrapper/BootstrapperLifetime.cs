@@ -14,28 +14,24 @@ namespace Codebelt.Bootstrapper
     /// </summary>
     /// <seealso cref="Disposable" />
     /// <seealso cref="IHostLifetime" />
-    public class BootstrapperLifetime : Disposable, IHostLifetime
+    public class BootstrapperLifetime : Disposable, IHostLifetime, IHostLifetimeEvents
     {
-        private readonly ConsoleLifetimeOptions _options;
         private readonly ConsoleLifetime _hostLifetime;
         private readonly IHostApplicationLifetime _applicationLifetime;
 
         /// <summary>
         /// Triggered when the application host has fully started.
         /// </summary>
-        public static Action OnApplicationStartedCallback { get; set; }
+        public Action OnApplicationStartedCallback { get; set; }
 
         /// <summary>
         /// Triggered when the application host is starting a graceful shutdown.
-        /// Shutdown will block until all callbacks registered on this token have completed.
         /// </summary>
-        public static Action OnApplicationStoppingCallback { get; set; }
+        public Action OnApplicationStoppingCallback { get; set; }
 
         /// <summary>
-        /// Triggered when the application host has completed a graceful shutdown.
-        /// The application will not exit until all callbacks registered on this token have completed.
-        /// </summary>
-        public static Action OnApplicationStoppedCallback { get; set; }
+        /// Triggered when the application host has completed a graceful shutdown./// </summary>
+        public Action OnApplicationStoppedCallback { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BootstrapperLifetime"/> class.
@@ -49,7 +45,6 @@ namespace Codebelt.Bootstrapper
         {
             _hostLifetime = new ConsoleLifetime(options, environment, applicationLifetime, hostOptions, loggerFactory);
             _applicationLifetime = applicationLifetime;
-            _options = options.Value;
         }
 
         /// <summary>
@@ -70,26 +65,23 @@ namespace Codebelt.Bootstrapper
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task WaitForStartAsync(CancellationToken cancellationToken)
         {
-            if (!_options.SuppressStatusMessages)
-            {
-                _applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
-                _applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
-                _applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
-            }
+            _applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
+            _applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
+            _applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
             return _hostLifetime.WaitForStartAsync(cancellationToken);
         }
 
-        private static void OnApplicationStarted()
+        private void OnApplicationStarted()
         {
             OnApplicationStartedCallback?.Invoke();
         }
 
-        private static void OnApplicationStopped()
+        private void OnApplicationStopped()
         {
             OnApplicationStoppedCallback?.Invoke();
         }
 
-        private static void OnApplicationStopping()
+        private void OnApplicationStopping()
         {
             OnApplicationStoppingCallback?.Invoke();
         }

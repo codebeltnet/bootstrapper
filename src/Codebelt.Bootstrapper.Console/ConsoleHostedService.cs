@@ -20,18 +20,21 @@ namespace Codebelt.Bootstrapper.Console
         private ILogger<TStartup> _logger;
         private bool _ranToCompletion;
         private Task _runAsyncTask;
+        private readonly IHostLifetimeEvents _events;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConsoleHostedService{TStartup}"/> class.
+        /// Initializes a new instance of the <see cref="ConsoleHostedService{TStartup}" /> class.
         /// </summary>
-        /// <param name="factory">The dependency injected <see cref="IStartupFactory{TStartup}"/>.</param>
-        /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime"/>.</param>
-        /// <param name="provider">The dependency injected <see cref="IServiceProvider"/>.</param>
-        public ConsoleHostedService(IStartupFactory<TStartup> factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider)
+        /// <param name="factory">The dependency injected <see cref="IStartupFactory{TStartup}" />.</param>
+        /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime" />.</param>
+        /// <param name="provider">The dependency injected <see cref="IServiceProvider" />.</param>
+        /// <param name="events">The dependency injected <see cref="IHostLifetimeEvents"/>.</param>
+        public ConsoleHostedService(IStartupFactory<TStartup> factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider, IHostLifetimeEvents events)
         {
             _factory = factory;
             _applicationLifetime = applicationLifetime;
             _provider = provider;
+            _events = events;
         }
 
         /// <summary>
@@ -41,36 +44,34 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var startup = _factory.Instance;
-
             _logger = _provider.GetRequiredService<ILogger<TStartup>>();
-
-            _runAsyncTask = Task.Run(async () =>
+            var startup = _factory.Instance;
+            if (startup != null)
             {
-                try
+                startup.ConfigureConsole(_provider);
+                _events.OnApplicationStartedCallback += () =>
                 {
-                    if (startup != null)
+                    _runAsyncTask = Task.Run(async () =>
                     {
-                        startup.ConfigureConsole(_provider);
+                        try
+                        {
+                            _logger.LogInformation("RunAsync started.");
+                            await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
+                            _ranToCompletion = true;
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", typeof(TStartup).FullName);
+                        }
+                    }, cancellationToken);
 
-                        await this.WaitForApplicationStartedAnnouncementAsync(cancellationToken).ConfigureAwait(false);
-
-                        _logger.LogInformation("RunAsync started.");
-                        await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
-                        _ranToCompletion = true;
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", typeof(TStartup).FullName);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", typeof(TStartup).FullName);
-                }
-            }, cancellationToken);
-
-            StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
+                    StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
+                };
+            }
+            else
+            {
+                _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", typeof(TStartup).FullName);
+            }
 
             return Task.CompletedTask;
         }

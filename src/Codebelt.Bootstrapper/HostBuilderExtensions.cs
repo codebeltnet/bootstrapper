@@ -21,6 +21,7 @@ namespace Codebelt.Bootstrapper
             return hostBuilder.ConfigureServices(services =>
             {
                 services.Replace(ServiceDescriptor.Singleton<IHostLifetime, BootstrapperLifetime>());
+                services.AddSingleton<IHostLifetimeEvents>(provider => provider.GetRequiredService<IHostLifetime>() as BootstrapperLifetime);
             });
         }
 

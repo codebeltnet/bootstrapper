@@ -16,9 +16,10 @@ namespace Codebelt.Bootstrapper.Console
         private readonly IProgramFactory _factory;
         private readonly IHostApplicationLifetime _applicationLifetime;
         private readonly IServiceProvider _provider;
-        private ILogger<MinimalConsoleHostedService> _logger;
+        private ILogger _logger;
         private bool _ranToCompletion;
         private Task _runAsyncTask;
+        private readonly IHostLifetimeEvents _events;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MinimalConsoleHostedService"/> class.
@@ -26,11 +27,13 @@ namespace Codebelt.Bootstrapper.Console
         /// <param name="factory">The dependency injected <see cref="IProgramFactory"/>.</param>
         /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime"/>.</param>
         /// <param name="provider">The dependency injected <see cref="IServiceProvider"/>.</param>
-        public MinimalConsoleHostedService(IProgramFactory factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider)
+        /// <param name="events">The dependency injected <see cref="IHostLifetimeEvents"/>.</param>
+        public MinimalConsoleHostedService(IProgramFactory factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider, IHostLifetimeEvents events)
         {
             _factory = factory;
             _applicationLifetime = applicationLifetime;
             _provider = provider;
+            _events = events;
         }
 
         /// <summary>
@@ -40,35 +43,37 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            var program = _factory.Instance;
-            var programType = program?.GetType() ?? typeof(MinimalConsoleProgram);
-
-            _logger = _provider.GetRequiredService<ILogger<MinimalConsoleHostedService>>();
-
-            _runAsyncTask = Task.Run(async () =>
+            _events.OnApplicationStartedCallback += () =>
             {
-                try
-                {
-                    if (program != null)
-                    {
-                        await this.WaitForApplicationStartedAnnouncementAsync(cancellationToken).ConfigureAwait(false);
+                var program = _factory.Instance;
+                var programType = program?.GetType() ?? typeof(MinimalConsoleProgram);
+                var loggerType = typeof(ILogger<>).MakeGenericType(programType);
 
-                        _logger.LogInformation("RunAsync started.");
-                        await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
-                        _ranToCompletion = true;
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", programType.FullName);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", programType.FullName);
-                }
-            }, cancellationToken);
+                _logger = _provider.GetRequiredService(loggerType) as ILogger;
 
-            StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
+                _runAsyncTask = Task.Run(async () =>
+                {
+                    try
+                    {
+                        if (program != null)
+                        {
+                            _logger.LogInformation("RunAsync started.");
+                            await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
+                            _ranToCompletion = true;
+                        }
+                        else
+                        {
+                            _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", programType.FullName);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", programType.FullName);
+                    }
+                }, cancellationToken);
+
+                StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
+            };
 
             return Task.CompletedTask;
         }
