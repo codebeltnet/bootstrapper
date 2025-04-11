@@ -17,10 +17,11 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>The initialized <see cref="HostApplicationBuilder"/>.</returns>
         protected static HostApplicationBuilder CreateHostBuilder(string[] args)
         {
-            return Host.CreateApplicationBuilder(args)
-                .UseBootstrapperLifetime()
-                .UseBootstrapperProgram(typeof(MinimalConsoleProgram))
-                .UseMinimalConsoleProgram();
+            var hb = Host.CreateApplicationBuilder(args);
+            hb.UseBootstrapperLifetime();
+            hb.UseBootstrapperProgram(typeof(MinimalConsoleProgram));
+            hb.UseMinimalConsoleProgram();
+            return hb;
         }
 
         /// <summary>
