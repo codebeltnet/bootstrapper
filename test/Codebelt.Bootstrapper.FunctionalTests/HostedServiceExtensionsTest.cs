@@ -22,12 +22,8 @@ namespace Codebelt.Bootstrapper
         {
             var timeToWait = TimeSpan.FromMilliseconds(50);
             var started = false;
-            BootstrapperLifetime.OnApplicationStartedCallback = () =>
-            {
-                Thread.Sleep(timeToWait);
-            };
 
-            using var test = GenericHostTestFactory.Create(services =>
+            using var test = HostTestFactory.Create(services =>
             {
                 services.AddXunitTestLoggingOutputHelperAccessor();
                 services.AddXunitTestLogging(TestOutput);
@@ -37,7 +33,13 @@ namespace Codebelt.Bootstrapper
                 hb.UseBootstrapperLifetime();
             }, new TestHostFixture());
 
-            var bgs = test.ServiceProvider.GetRequiredService<IHostedService>() as TestBackgroundService;
+            test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStartedCallback += () =>
+                {
+                    Thread.Sleep(timeToWait);
+                };
+
+
+            var bgs = test.Host.Services.GetRequiredService<IHostedService>() as TestBackgroundService;
 
             await test.Host.StartAsync().ConfigureAwait(false);
 

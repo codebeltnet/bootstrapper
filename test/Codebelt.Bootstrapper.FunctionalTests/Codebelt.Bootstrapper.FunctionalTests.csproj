@@ -4,14 +4,6 @@
     <RootNamespace>Codebelt.Bootstrapper</RootNamespace>
   </PropertyGroup>
 
-  <!-- Added due to BootstrapperLifetime static callbacks -->
-  <ItemGroup>
-    <AssemblyAttribute Include="Xunit.CollectionBehaviorAttribute">
-      <_Parameter1>DisableTestParallelization = true</_Parameter1>
-      <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
-    </AssemblyAttribute>
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\Codebelt.Bootstrapper\Codebelt.Bootstrapper.csproj" />
   </ItemGroup>

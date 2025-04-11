@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Codebelt.Extensions.Xunit.Hosting;
 using Codebelt.Extensions.Xunit;
+using Codebelt.Extensions.Xunit.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper.Assets
+namespace Codebelt.Bootstrapper.Console.Assets
 {
-    public class TestHostFixture : HostFixture
+    public class TestHostFixture : GenericHostFixture
     {
         public override void ConfigureHost(Test hostTest)
         {
@@ -18,7 +18,7 @@ namespace Codebelt.Bootstrapper.Assets
                 .ConfigureServices((context, services) =>
                 {
                     Configuration = context.Configuration;
-                    HostingEnvironment = context.HostingEnvironment;
+                    Environment = context.HostingEnvironment;
                     ConfigureServicesCallback(services);
                 })
                 .ConfigureHostConfiguration(builder =>

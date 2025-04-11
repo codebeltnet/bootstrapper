@@ -23,9 +23,9 @@ namespace Codebelt.Bootstrapper
         [Fact]
         public void UseBootstrapperLifetime_ShouldRegisterBootstrapperLifetime()
         {
-            var host = Host.CreateApplicationBuilder()
-                .UseBootstrapperLifetime()
-                .Build();
+            var hb = Host.CreateApplicationBuilder();
+            hb.UseBootstrapperLifetime();
+            var host = hb.Build();
 
             var bootstrapperLifetime = host.Services.GetService<IHostLifetime>();
 

@@ -17,14 +17,14 @@ namespace Codebelt.Bootstrapper
         [Fact]
         public void UseBootstrapperLifetime_ShouldRegisterBootstrapperLifetime()
         {
-            using var test = GenericHostTestFactory.Create(services =>
+            using var test = HostTestFactory.Create(services =>
             {
             }, hb =>
             {
                 hb.UseBootstrapperLifetime();
-            }, new TestHostFixture());
+            });
 
-            var bootstrapperLifetime = test.ServiceProvider.GetService<IHostLifetime>();
+            var bootstrapperLifetime = test.Host.Services.GetService<IHostLifetime>();
 
             Assert.NotNull(bootstrapperLifetime);
             Assert.IsType<BootstrapperLifetime>(bootstrapperLifetime);
@@ -33,14 +33,14 @@ namespace Codebelt.Bootstrapper
         [Fact]
         public void UseBootstrapperStartup_ShouldRegisterStartupFactory()
         {
-            using var test = GenericHostTestFactory.Create(services =>
+            using var test = HostTestFactory.Create(services =>
             {
             }, hb =>
             {
                 hb.UseBootstrapperStartup<TestStartup>();
-            }, new TestHostFixture());
+            });
 
-            var startupFactory = test.ServiceProvider.GetService<IStartupFactory<TestStartup>>();
+            var startupFactory = test.Host.Services.GetService<IStartupFactory<TestStartup>>();
 
             Assert.NotNull(startupFactory);
             Assert.IsType<StartupFactory<TestStartup>>(startupFactory);
