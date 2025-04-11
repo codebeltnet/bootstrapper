@@ -9,7 +9,7 @@ namespace Codebelt.Bootstrapper.Web
     public abstract class MinimalWebProgram : ProgramRoot
     {
         /// <summary>
-        /// Creates an <see cref="HostApplicationBuilder"/> used to set up the host.
+        /// Creates an <see cref="WebApplicationBuilder"/> used to set up the host.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         /// <returns>The initialized <see cref="HostApplicationBuilder"/>.</returns>

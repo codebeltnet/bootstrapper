@@ -18,14 +18,16 @@ namespace Codebelt.Bootstrapper.MinimalConsole.App
             var host = builder.Build();
 
             var logger = host.Services.GetRequiredService<ILogger<Program>>();
-            BootstrapperLifetime.OnApplicationStartedCallback = () => logger.LogWarning("Console started.");
-            BootstrapperLifetime.OnApplicationStoppingCallback = () =>
+            var events = host.Services.GetRequiredService<IHostLifetimeEvents>();
+
+            events.OnApplicationStartedCallback = () => logger.LogWarning("Console started.");
+            events.OnApplicationStoppingCallback = () =>
             {
                 logger.LogWarning("Stopping and cleaning ..");
                 Thread.Sleep(TimeSpan.FromSeconds(5)); // simulate graceful shutdown
                 logger.LogWarning(".. done!");
             };
-            BootstrapperLifetime.OnApplicationStoppedCallback = () => logger.LogCritical("Console stopped.");
+            events.OnApplicationStoppedCallback = () => logger.LogCritical("Console stopped.");
 
             return host.RunAsync();
         }

@@ -1,4 +1,21 @@
-﻿Version 3.0.1
+﻿Version 4.0.0
+Availability: .NET 9 and .NET 8
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- REMOVED HostedServiceExtensions class in the Codebelt.Bootstrapper namespace (WaitForApplicationStartedAnnouncementAsync extension method)
+- CHANGED BootstrapperLifetime class in the Codebelt.Bootstrapper namespace to implement IHostLifetimeEvents (hereby removing static equivalents)
+- CHANGED UseBootstrapperStartup method on the HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper namespace to extend IHostApplicationBuilder instead of HostApplicationBuilder
+ 
+# New Features
+- ADDED IHostLifetimeEvents interface in the Codebelt.Bootstrapper namespace that provides a convenient way to be notified of host lifetime events
+ 
+# Bug Fixes
+- FIXED BootstrapperLifetime class in the Codebelt.Bootstrapper namespace to disregard SuppressStatusMessages and always assign callbacks to members of IHostLifetimeEvents
+ 
+Version 3.0.1
 Availability: .NET 9 and .NET 8
  
 # ALM

@@ -21,7 +21,7 @@ on:
 jobs:
   build:
     name: 🛠️ Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         configuration: [Debug, Release]
@@ -62,7 +62,7 @@ jobs:
 
   pack:
     name: 📦 Pack
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         configuration: [Debug, Release]
@@ -80,10 +80,16 @@ jobs:
           uploadPackedArtifact: true
           version: ${{ needs.build.outputs.version }}
 
-  sonarcloud:
-    name: 🔬 Code Quality Analysis
+  test:
+    name: 🧪 Test
     needs: [build]
-    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+        configuration: [Debug, Release]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: codebeltnet/git-checkout@v1
@@ -93,64 +99,43 @@ jobs:
         with:
           includePreview: true
 
-      - name: Install .NET Tool - Sonar Scanner
-        uses: codebeltnet/dotnet-tool-install-sonarscanner@v1
+      - name: Install .NET Tool - Report Generator
+        uses: codebeltnet/dotnet-tool-install-reportgenerator@v1
 
-      - name: Restore Dependencies
-        uses: codebeltnet/dotnet-restore@v2
-
-      - name: Run SonarCloud Analysis
-        uses: codebeltnet/sonarcloud-scan@v1
+      - name: Test with ${{ matrix.configuration }} build
+        uses: codebeltnet/dotnet-test@v3
         with:
-          token: ${{ secrets.SONAR_TOKEN }}
-          organization: geekle
-          projectKey: bootstrapper
-          version: ${{ needs.build.outputs.version }}
-
-      - name: Build
-        uses: codebeltnet/dotnet-build@v2
-        with:
+          configuration: ${{ matrix.configuration }}
           buildSwitches: -p:SkipSignAssembly=true
-          uploadBuildArtifact: false
 
-      - name: Finalize SonarCloud Analysis
-        uses: codebeltnet/sonarcloud-scan-finalize@v1
-        with:
-          token: ${{ secrets.SONAR_TOKEN }}
+  sonarcloud:
+    name: call-sonarcloud
+    needs: [build,test]
+    uses: codebeltnet/jobs-sonarcloud/.github/workflows/default.yml@v1
+    with:
+      organization: geekle
+      projectKey: bootstrapper
+      version: ${{ needs.build.outputs.version }}
+    secrets: inherit
+
+  codecov:
+    name: call-codecov
+    needs: [build,test]
+    uses: codebeltnet/jobs-codecov/.github/workflows/default.yml@v1
+    with:
+      repository: codebeltnet/bootstrapper
+    secrets: inherit
 
   codeql:
-    name: 🛡️ Security Analysis
-    needs: [build]
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: codebeltnet/git-checkout@v1
-
-      - name: Install .NET
-        uses: codebeltnet/install-dotnet@v1
-        with:
-          includePreview: true
-
-      - name: Restore Dependencies
-        uses: codebeltnet/dotnet-restore@v2
-
-      - name: Prepare CodeQL SAST Analysis
-        uses: codebeltnet/codeql-scan@v1
-
-      - name: Build
-        uses: codebeltnet/dotnet-build@v2
-        with:
-          buildSwitches: -p:SkipSignAssembly=true
-          uploadBuildArtifact: false
-
-      - name: Finalize CodeQL SAST Analysis
-        uses: codebeltnet/codeql-scan-finalize@v1
+    name: call-codeql
+    needs: [build,test]
+    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v1
 
   deploy:
     if: github.event_name != 'pull_request'
     name: 🚀 Deploy v${{ needs.build.outputs.version }}
-    runs-on: ubuntu-22.04
-    needs: [build,pack,sonarcloud,codeql]
+    runs-on: ubuntu-24.04
+    needs: [build, pack, test, sonarcloud, codecov, codeql]
     environment: Production
     steps:
       - uses: codebeltnet/nuget-push@v1

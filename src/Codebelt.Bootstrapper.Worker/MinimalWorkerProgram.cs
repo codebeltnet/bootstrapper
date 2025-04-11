@@ -14,8 +14,9 @@ namespace Codebelt.Bootstrapper.Worker
         /// <returns>The initialized <see cref="HostApplicationBuilder"/>.</returns>
         protected static HostApplicationBuilder CreateHostBuilder(string[] args)
         {
-            return Host.CreateApplicationBuilder(args)
-                .UseBootstrapperLifetime();
+            var hb = Host.CreateApplicationBuilder(args);
+            hb.UseBootstrapperLifetime();
+            return hb;
         }
     }
 }

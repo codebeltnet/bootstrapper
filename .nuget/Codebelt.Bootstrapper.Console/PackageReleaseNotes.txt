@@ -1,4 +1,14 @@
-﻿Version 3.0.1
+﻿Version 4.0.0
+Availability: .NET 9 and .NET 8
+ 
+# ALM
+- CHANGED Dependencies to latest and greatest with respect to TFMs
+ 
+# Breaking Changes
+- CHANGED UseBootstrapperProgram method on the HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Console namespace to extend IHostApplicationBuilder instead of HostApplicationBuilder
+- CHANGED UseMinimalConsoleProgram method on the HostApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Console namespace to extend IHostApplicationBuilder instead of HostApplicationBuilder
+ 
+Version 3.0.1
 Availability: .NET 9 and .NET 8
  
 # ALM
