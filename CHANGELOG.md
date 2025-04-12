@@ -22,6 +22,7 @@ This major release revisits and refines some of the earlier design decisions to 
 ### Removed
 
 - HostedServiceExtensions class in the Codebelt.Bootstrapper namespace (breaking change)
+- WebApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Web namespace (breaking change)
 
 ### Fixed
 
