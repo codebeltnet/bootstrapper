@@ -4,7 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [4.0.0] - TBD
+## [4.0.0] - 2025-04-12
 
 This major release revisits and refines some of the earlier design decisions to offer a more consistent and flexible API. It also brings forward improvements to reliability and maintainability.
 

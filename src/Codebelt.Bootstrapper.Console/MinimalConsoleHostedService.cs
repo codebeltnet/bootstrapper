@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cuemon;
 
 namespace Codebelt.Bootstrapper.Console
 {
@@ -57,18 +58,18 @@ namespace Codebelt.Bootstrapper.Console
                     {
                         if (program != null)
                         {
-                            _logger.LogInformation("RunAsync started.");
+                            Decorator.EncloseToExpose(_logger, false).RunAsyncStarted();
                             await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
                             _ranToCompletion = true;
                         }
                         else
                         {
-                            _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", programType.FullName);
+                            Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(programType.FullName);
                         }
                     }
                     catch (Exception e)
                     {
-                        _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", programType.FullName);
+                        Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(programType.FullName, e);
                     }
                 }, cancellationToken);
 
@@ -93,11 +94,11 @@ namespace Codebelt.Bootstrapper.Console
         {
             if (!_ranToCompletion)
             {
-                _logger?.LogInformation("RunAsync ended prematurely.");
+                Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd();
             }
             else
             {
-                _logger?.LogInformation("RunAsync completed successfully.");
+                Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted();
             }
 
             return Task.CompletedTask;

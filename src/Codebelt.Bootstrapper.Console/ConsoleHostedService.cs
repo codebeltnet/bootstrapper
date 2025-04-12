@@ -1,9 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Cuemon;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Codebelt.Bootstrapper.Console
 {
@@ -55,13 +56,13 @@ namespace Codebelt.Bootstrapper.Console
                     {
                         try
                         {
-                            _logger.LogInformation("RunAsync started.");
+                            Decorator.EncloseToExpose(_logger, false).RunAsyncStarted();
                             await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
                             _ranToCompletion = true;
                         }
                         catch (Exception e)
                         {
-                            _logger.LogCritical(e, "Fatal error occurred while activating {TypeFullName}.", typeof(TStartup).FullName);
+                            Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeof(TStartup).FullName, e);
                         }
                     }, cancellationToken);
 
@@ -70,7 +71,7 @@ namespace Codebelt.Bootstrapper.Console
             }
             else
             {
-                _logger.LogWarning("Unable to activate an instance of {TypeFullName}.", typeof(TStartup).FullName);
+                Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeof(TStartup).FullName);
             }
 
             return Task.CompletedTask;
@@ -91,11 +92,11 @@ namespace Codebelt.Bootstrapper.Console
         {
             if (!_ranToCompletion)
             {
-                _logger?.LogInformation("RunAsync ended prematurely.");
+                Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd();
             }
             else
             {
-                _logger?.LogInformation("RunAsync completed successfully.");
+                Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted();
             }
 
             return Task.CompletedTask;
