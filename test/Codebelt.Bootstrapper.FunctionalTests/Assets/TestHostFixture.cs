@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Codebelt.Bootstrapper.Assets
 {
-    public class TestHostFixture : GenericHostFixture
+    public class TestHostFixture : ManagedHostFixture
     {
         public override void ConfigureHost(Test hostTest)
         {

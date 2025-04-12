@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Codebelt.Bootstrapper.Worker</RootNamespace>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Worker\Codebelt.Bootstrapper.Worker.csproj" />
+  </ItemGroup>
+
+</Project>
