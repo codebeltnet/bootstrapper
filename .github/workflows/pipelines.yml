@@ -139,7 +139,7 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     name: 🚀 Deploy v${{ needs.build.outputs.version }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     needs: [build, pack, test, sonarcloud, codecov, codeql]
     environment: Production
     permissions:
