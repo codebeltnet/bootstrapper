@@ -15,8 +15,9 @@ namespace Codebelt.Bootstrapper.Web
         /// <returns>The initialized <see cref="HostApplicationBuilder"/>.</returns>
         protected static WebApplicationBuilder CreateHostBuilder(string[] args)
         {
-            return WebApplication.CreateBuilder(args)
-                .UseBootstrapperLifetime();
+            var hb = WebApplication.CreateBuilder(args);
+            hb.UseBootstrapperLifetime();
+            return hb;
         }
     }
 }

@@ -4,6 +4,9 @@ Availability: .NET 9 and .NET 8
 # ALM
 - CHANGED Dependencies to latest and greatest with respect to TFMs
  
+# Breaking Changes
+- REMOVED WebApplicationBuilderExtensions class in the Codebelt.Bootstrapper.Web namespace (UseBootstrapperLifetime extension method)
+ 
 Version 3.0.1
 Availability: .NET 9 and .NET 8
  
