@@ -46,7 +46,8 @@ namespace Codebelt.Bootstrapper.Worker.Assets
                 if (_gracefulShutdown) { return; }
                 _logger.LogInformation("Worker running in iterations: {iteration}", i);
                 i++;
-                await Task.Delay(TimeSpan.FromMilliseconds(1000), stoppingToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(500), stoppingToken);
+                if (i == 6) { break; }
             }
         }
     }
