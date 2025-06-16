@@ -4,26 +4,26 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Codebelt.Extensions.Swashbuckle.AspNetCore" Version="9.0.3" />
-    <PackageVersion Include="Codebelt.Extensions.Xunit.App" Version="10.0.1" />
-    <PackageVersion Include="Cuemon.Core" Version="9.0.5" />
-    <PackageVersion Include="Cuemon.Extensions.Hosting" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageVersion Include="Codebelt.Extensions.Xunit.App" Version="10.0.3" />
+    <PackageVersion Include="Cuemon.Core" Version="9.0.6" />
+    <PackageVersion Include="Cuemon.Extensions.Hosting" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="MinVer" Version="6.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net9'))">
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.16" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.16" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.17" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.17" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
