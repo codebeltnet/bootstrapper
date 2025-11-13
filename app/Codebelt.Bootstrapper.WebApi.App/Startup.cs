@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using Cuemon.Extensions.Hosting;
+using Microsoft.OpenApi;
 
 namespace Codebelt.Bootstrapper.WebApi.App
 {
