@@ -6,7 +6,6 @@ using Cuemon.Extensions.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Codebelt.Bootstrapper.Web
 {
