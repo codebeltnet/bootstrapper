@@ -36,7 +36,7 @@ namespace Codebelt.Bootstrapper.Assets
             {
                 try
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(25), stoppingToken).ConfigureAwait(false);
+                    await Task.Delay(TimeSpan.FromMilliseconds(1), stoppingToken).ConfigureAwait(false);
                 }
                 finally
                 {

@@ -26,7 +26,6 @@ namespace Codebelt.Bootstrapper
 
             using var test = HostTestFactory.Create(services =>
             {
-                services.AddXunitTestLoggingOutputHelperAccessor();
                 services.AddXunitTestLogging(TestOutput);
                 services.AddHostedService<TestBackgroundService>();
                 services.Configure<HostOptions>(o => o.ShutdownTimeout = TimeSpan.FromSeconds(5));
