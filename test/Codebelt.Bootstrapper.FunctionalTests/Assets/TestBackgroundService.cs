@@ -11,13 +11,19 @@ namespace Codebelt.Bootstrapper.Assets
     {
         private readonly ILogger<TestBackgroundService> _logger;
         private readonly IHostLifetimeEvents _events;
+        private readonly Stopwatch _stopwatch;
 
-        public TestBackgroundService(
-            ILogger<TestBackgroundService> logger,
-            IHostLifetimeEvents events)
+        public TestBackgroundService(ILogger<TestBackgroundService> logger, IHostLifetimeEvents events, IHostApplicationLifetime applicationLifetime)
         {
             _logger = logger;
             _events = events;
+            _stopwatch = new Stopwatch();
+
+            _events.OnApplicationStartedCallback += () =>
+            {
+                _logger.LogInformation("TestBackgroundService started after {Elapsed}", Elapsed);
+                applicationLifetime.StopApplication();
+            };
         }
 
         public TimeSpan Elapsed { get; private set; } = TimeSpan.Zero;
@@ -25,17 +31,17 @@ namespace Codebelt.Bootstrapper.Assets
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var sw = Stopwatch.StartNew();
-            _events.OnApplicationStartedCallback += () =>
-            {
-                sw.Stop();
-                Elapsed = sw.Elapsed;
-            };
-
+            _stopwatch.Start();
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.UtcNow.ToString("O"));
-                await Task.Delay(TimeSpan.FromMilliseconds(50), stoppingToken);
+                try
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(25), stoppingToken).ConfigureAwait(false);
+                }
+                finally
+                {
+                    Elapsed = _stopwatch.Elapsed;
+                }
             }
         }
     }
