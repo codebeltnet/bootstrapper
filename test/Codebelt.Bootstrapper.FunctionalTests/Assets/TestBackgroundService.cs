@@ -17,7 +17,7 @@ namespace Codebelt.Bootstrapper.Assets
         {
             _logger = logger;
             _events = events;
-            _stopwatch = new Stopwatch();
+            _stopwatch = Stopwatch.StartNew();
 
             _events.OnApplicationStartedCallback += () =>
             {
@@ -31,7 +31,6 @@ namespace Codebelt.Bootstrapper.Assets
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _stopwatch.Start();
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
