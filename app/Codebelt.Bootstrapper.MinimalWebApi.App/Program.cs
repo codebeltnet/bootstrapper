@@ -1,6 +1,6 @@
 
 using Codebelt.Bootstrapper.Web;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Codebelt.Bootstrapper.MinimalWebApi.App
 {

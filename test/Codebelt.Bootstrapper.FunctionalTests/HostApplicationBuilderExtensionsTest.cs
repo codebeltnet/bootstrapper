@@ -9,7 +9,6 @@ using Codebelt.Extensions.Xunit.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Xunit;
-using Xunit.Abstractions;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Codebelt.Bootstrapper

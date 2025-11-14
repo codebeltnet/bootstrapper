@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Codebelt.Bootstrapper
 {

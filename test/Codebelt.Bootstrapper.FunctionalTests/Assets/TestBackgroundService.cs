@@ -10,28 +10,38 @@ namespace Codebelt.Bootstrapper.Assets
     public class TestBackgroundService : BackgroundService
     {
         private readonly ILogger<TestBackgroundService> _logger;
-        private readonly IHostApplicationLifetime _applicationLifetime;
-        private readonly IHostLifetime _hostLifetime;
-        private IHostLifetimeEvents _events;
+        private readonly IHostLifetimeEvents _events;
+        private readonly Stopwatch _stopwatch;
 
-        public TestBackgroundService(ILogger<TestBackgroundService> logger, IHostApplicationLifetime applicationLifetime, IHostLifetimeEvents events)
+        public TestBackgroundService(ILogger<TestBackgroundService> logger, IHostLifetimeEvents events, IHostApplicationLifetime applicationLifetime)
         {
             _logger = logger;
-            _applicationLifetime = applicationLifetime;
             _events = events;
+            _stopwatch = Stopwatch.StartNew();
+
+            _events.OnApplicationStartedCallback += () =>
+            {
+                _logger.LogInformation("TestBackgroundService started after {Elapsed}", Elapsed);
+                applicationLifetime.StopApplication();
+            };
         }
 
         public TimeSpan Elapsed { get; private set; } = TimeSpan.Zero;
 
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var sw = Stopwatch.StartNew();
-            _events.OnApplicationStartedCallback += () =>
+            while (!stoppingToken.IsCancellationRequested)
             {
-                sw.Stop();
-                Elapsed = sw.Elapsed;
-                _logger.LogInformation("TestBackgroundService started after {Elapsed}", Elapsed);
-            };
+                try
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1), stoppingToken).ConfigureAwait(false);
+                }
+                finally
+                {
+                    Elapsed = _stopwatch.Elapsed;
+                }
+            }
         }
     }
 }

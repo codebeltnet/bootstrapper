@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Worker\Codebelt.Bootstrapper.Worker.csproj" />
   </ItemGroup>
