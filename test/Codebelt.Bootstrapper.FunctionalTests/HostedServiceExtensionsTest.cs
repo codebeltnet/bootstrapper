@@ -19,10 +19,9 @@ namespace Codebelt.Bootstrapper
         [Fact]
         public async Task WaitForApplicationStartedAnnouncementAsync_MustWaitForApplicationStarted()
         {
-            var timeToWait = TimeSpan.FromMilliseconds(500);
-            var started = false;
+            var timeToWait = TimeSpan.FromMilliseconds(50);
 
-            var test = HostTestFactory.Create(services =>
+            using var test = HostTestFactory.Create(services =>
             {
                 services.AddXunitTestLoggingOutputHelperAccessor();
                 services.AddXunitTestLogging(TestOutput);
@@ -32,23 +31,27 @@ namespace Codebelt.Bootstrapper
                 hb.UseBootstrapperLifetime();
             }, new TestHostFixture());
 
-            test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStartedCallback += () =>
+            var lifetimeEvents = test.Host.Services.GetRequiredService<IHostLifetimeEvents>();
+
+            // Introduce the artificial delay *inside* the announcement pipeline,
+            // but don't compete with the service's own handler.
+            lifetimeEvents.OnApplicationStartedCallback += () =>
             {
                 Thread.Sleep(timeToWait);
             };
 
-
-            var bgs = test.Host.Services.GetRequiredService<IHostedService>() as TestBackgroundService;
+            var bgs = (TestBackgroundService)test.Host.Services.GetRequiredService<IHostedService>();
 
             await test.Host.StartAsync().ConfigureAwait(false);
 
-            await Task.Delay(timeToWait).ConfigureAwait(false);
+            // Now wait for the background service to finish waiting for the announcement:
+            var elapsed = await bgs.Completed.Task
+                .WaitAsync(TimeSpan.FromSeconds(5))
+                .ConfigureAwait(false);
 
-            TestOutput.WriteLine($"{bgs.Elapsed} >= {timeToWait}");
+            TestOutput.WriteLine($"{elapsed} >= {timeToWait}");
 
-            Assert.True(bgs.Elapsed >= timeToWait, $"{bgs.Elapsed} >= {timeToWait}");
-
-            await test.DisposeAsync().ConfigureAwait(false);
+            Assert.True(elapsed >= timeToWait, $"{elapsed} >= {timeToWait}");
         }
     }
 }
