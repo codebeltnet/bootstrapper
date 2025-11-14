@@ -22,7 +22,7 @@ namespace Codebelt.Bootstrapper
             var timeToWait = TimeSpan.FromMilliseconds(500);
             var started = false;
 
-            using var test = HostTestFactory.Create(services =>
+            var test = HostTestFactory.Create(services =>
             {
                 services.AddXunitTestLoggingOutputHelperAccessor();
                 services.AddXunitTestLogging(TestOutput);
@@ -47,6 +47,8 @@ namespace Codebelt.Bootstrapper
             TestOutput.WriteLine($"{bgs.Elapsed} >= {timeToWait}");
 
             Assert.True(bgs.Elapsed >= timeToWait, $"{bgs.Elapsed} >= {timeToWait}");
+
+            await test.DisposeAsync().ConfigureAwait(false);
         }
     }
 }
