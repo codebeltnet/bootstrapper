@@ -60,6 +60,7 @@ jobs:
       projects: test/**/*.csproj
       configuration: ${{ matrix.configuration }}
       runs-on: ${{ matrix.os }}
+      verbosity-level: normal
       build-switches: -p:SkipSignAssembly=true
       restore: true
       build: true
@@ -82,17 +83,17 @@ jobs:
       repository: codebeltnet/bootstrapper
     secrets: inherit
 
-  # codeql:
-  #   name: call-codeql
-  #   needs: [build,test]
-  #   uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
-  #   permissions:
-  #     security-events: write
+  codeql:
+    name: call-codeql
+    needs: [build,test]
+    uses: codebeltnet/jobs-codeql/.github/workflows/default.yml@v3
+    permissions:
+      security-events: write
 
   deploy:
     if: github.event_name != 'pull_request'
     name: call-nuget
-    needs: [build, pack, test, sonarcloud, codecov]
+    needs: [build, pack, test, sonarcloud, codecov, codeql]
     uses: codebeltnet/jobs-nuget-push/.github/workflows/default.yml@v2
     with:
       version: ${{ needs.build.outputs.version }}
