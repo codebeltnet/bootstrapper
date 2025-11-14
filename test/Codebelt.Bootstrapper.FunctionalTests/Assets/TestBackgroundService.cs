@@ -22,21 +22,21 @@ namespace Codebelt.Bootstrapper.Assets
 
         public TimeSpan Elapsed { get; private set; } = TimeSpan.Zero;
 
-        // Let the test wait until we're done measuring
-        public TaskCompletionSource<TimeSpan> Completed { get; } =
-            new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var sw = Stopwatch.StartNew();
-
             _events.OnApplicationStartedCallback += () =>
             {
                 sw.Stop();
                 Elapsed = sw.Elapsed;
-                _logger.LogInformation("TestBackgroundService started after {Elapsed}", Elapsed);
-                Completed.TrySetResult(Elapsed);
             };
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.UtcNow.ToString("O"));
+                await Task.Delay(TimeSpan.FromMilliseconds(50), stoppingToken);
+            }
         }
     }
 }

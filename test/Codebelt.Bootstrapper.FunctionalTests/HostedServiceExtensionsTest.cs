@@ -19,7 +19,7 @@ namespace Codebelt.Bootstrapper
         [Fact]
         public async Task WaitForApplicationStartedAnnouncementAsync_MustWaitForApplicationStarted()
         {
-            var timeToWait = TimeSpan.FromMilliseconds(50);
+            var timeToWait = TimeSpan.FromMilliseconds(500);
 
             using var test = HostTestFactory.Create(services =>
             {
@@ -33,8 +33,6 @@ namespace Codebelt.Bootstrapper
 
             var lifetimeEvents = test.Host.Services.GetRequiredService<IHostLifetimeEvents>();
 
-            // Introduce the artificial delay *inside* the announcement pipeline,
-            // but don't compete with the service's own handler.
             lifetimeEvents.OnApplicationStartedCallback += () =>
             {
                 Thread.Sleep(timeToWait);
@@ -43,15 +41,10 @@ namespace Codebelt.Bootstrapper
             var bgs = (TestBackgroundService)test.Host.Services.GetRequiredService<IHostedService>();
 
             await test.Host.StartAsync().ConfigureAwait(false);
+            
+            TestOutput.WriteLine($"{bgs.Elapsed} >= {timeToWait}");
 
-            // Now wait for the background service to finish waiting for the announcement:
-            var elapsed = await bgs.Completed.Task
-                .WaitAsync(TimeSpan.FromSeconds(5))
-                .ConfigureAwait(false);
-
-            TestOutput.WriteLine($"{elapsed} >= {timeToWait}");
-
-            Assert.True(elapsed >= timeToWait, $"{elapsed} >= {timeToWait}");
+            Assert.True(bgs.Elapsed >= timeToWait, $"{bgs.Elapsed} >= {timeToWait}");
         }
     }
 }
