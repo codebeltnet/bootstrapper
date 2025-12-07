@@ -4,6 +4,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.1] - 2025-12-07
+
+This is a service update that primarily focuses on fixing issues related to host lifetime status message suppression.
+
+### Fixed
+
+- ConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace to properly handle suppression of host lifetime status messages when configured to do so
+- MinimalConsoleHostedService class in the Codebelt.Bootstrapper.Console namespace to properly handle suppression of host lifetime status messages when configured to do so
+
 ## [5.0.0] - 2025-11-14
 
 This is a major release that focuses on adapting the latest `.NET 10` release (LTS) in exchange for current `.NET 8` (LTS).

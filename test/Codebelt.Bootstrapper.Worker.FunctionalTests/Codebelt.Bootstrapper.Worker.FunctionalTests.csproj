@@ -7,5 +7,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Codebelt.Bootstrapper.Worker\Codebelt.Bootstrapper.Worker.csproj" />
   </ItemGroup>
-
+  
 </Project>

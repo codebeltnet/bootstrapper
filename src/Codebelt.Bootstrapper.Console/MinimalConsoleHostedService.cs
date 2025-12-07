@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Cuemon;
+using Microsoft.Extensions.Options;
 
 namespace Codebelt.Bootstrapper.Console
 {
@@ -21,6 +22,7 @@ namespace Codebelt.Bootstrapper.Console
         private bool _ranToCompletion;
         private Task _runAsyncTask;
         private readonly IHostLifetimeEvents _events;
+        private readonly bool _suppressStatusMessages;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MinimalConsoleHostedService"/> class.
@@ -35,6 +37,7 @@ namespace Codebelt.Bootstrapper.Console
             _applicationLifetime = applicationLifetime;
             _provider = provider;
             _events = events;
+            _suppressStatusMessages = provider.GetService<IOptions<ConsoleLifetimeOptions>>()?.Value.SuppressStatusMessages ?? false;
         }
 
         /// <summary>
@@ -58,18 +61,18 @@ namespace Codebelt.Bootstrapper.Console
                     {
                         if (program != null)
                         {
-                            Decorator.EncloseToExpose(_logger, false).RunAsyncStarted();
+                            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
                             await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
                             _ranToCompletion = true;
                         }
                         else
                         {
-                            Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(programType.FullName);
+                            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(programType.FullName); }
                         }
                     }
                     catch (Exception e)
                     {
-                        Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(programType.FullName, e);
+                        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(programType.FullName, e); }
                     }
                 }, cancellationToken);
 
@@ -94,11 +97,11 @@ namespace Codebelt.Bootstrapper.Console
         {
             if (!_ranToCompletion)
             {
-                Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd();
+                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd(); }
             }
             else
             {
-                Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted();
+                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted(); }
             }
 
             return Task.CompletedTask;
