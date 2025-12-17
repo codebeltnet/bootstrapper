@@ -4,6 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.0.2] - 2025-12-17
+
+This is a service update that primarily focuses on fixing an issue related to MinimalConsoleProgram generics support.
+
+### Fixed
+
+- MinimalConsoleProgram class in the Codebelt.Bootstrapper.Console namespace was extended to also supports generics like its ConsoleProgram counterpart (but limited to ProgramRoot)
+
 ## [5.0.1] - 2025-12-07
 
 This is a service update that primarily focuses on fixing issues related to host lifetime status message suppression.
