@@ -1,10 +1,10 @@
 ---
-description: 'Writing Unit Tests in Bootstrapper'
+description: 'Writing Unit Tests'
 applyTo: "**/*.{cs,csproj}"
 ---
 
-# Writing Unit Tests in Bootstrapper
-This document provides instructions for writing unit tests in the Bootstrapper codebase. Please follow these guidelines to ensure consistency and maintainability.
+# Writing Unit Tests
+This document provides instructions for writing unit tests for a project/solution. Please follow these guidelines to ensure consistency and maintainability.
 
 ## 1. Base Class
 
@@ -48,35 +48,35 @@ namespace Your.Namespace
 ## 5. File and Namespace Organization
 
 - Place test files in the appropriate test project and folder structure.
-- Use namespaces that mirror the source code structure. The namespace of a test file MUST match the namespace of the System Under Test (SUT). Do NOT append ".Tests", ".Benchmarks" or similar suffixes to the namespace. Only the assembly/project name should indicate that the file is a test/benchmark (for example: Bootstrapper.Foo.Tests assembly, but namespace Bootstrapper.Foo).
-  - Example: If the SUT class is declared as:
-    ```csharp
-    namespace Bootstrapper.Foo.Bar
-    {
-        public class Zoo { /* ... */ }
-    }
+- Use namespaces that mirror the source code structure. The namespace of a test file MUST match the namespace of the System Under Test (SUT). Do NOT append ".Tests", ".Benchmarks" or similar suffixes to the namespace. Only the assembly/project name should indicate that the file is a test/benchmark (for example: YourProject.Foo.Tests assembly, but namespace YourProject.Foo).
+    - Example: If the SUT class is declared as:
+        ```csharp
+        namespace YourProject.Foo.Bar
+        {
+                public class Zoo { /* ... */ }
+        }
+        ```
+        then the corresponding unit test class must use the exact same namespace:
+        ```csharp
+        namespace YourProject.Foo.Bar
+        {
+                public class ZooTest : Test { /* ... */ }
+        }
+        ```
+    - Do NOT use:
+        ```csharp
+        namespace YourProject.Foo.Bar.Tests { /* ... */ } // ❌
+        namespace YourProject.Foo.Bar.Benchmarks { /* ... */ } // ❌
+        ```
+ - The unit tests for the YourProject.Foo assembly live in the YourProject.Foo.Tests assembly.
+ - The functional tests for the YourProject.Foo assembly live in the YourProject.Foo.FunctionalTests assembly.
+ - Test class names end with Test and live in the same namespace as the class being tested, e.g., the unit tests for the Boo class that resides in the YourProject.Foo assembly would be named BooTest and placed in the YourProject.Foo namespace in the YourProject.Foo.Tests assembly.
+ - Modify the associated .csproj file to override the root namespace so the compiled namespace matches the SUT. Example:
+    ```xml
+    <PropertyGroup>
+        <RootNamespace>YourProject.Foo</RootNamespace>
+    </PropertyGroup>
     ```
-    then the corresponding unit test class must use the exact same namespace:
-    ```csharp
-    namespace Bootstrapper.Foo.Bar
-    {
-        public class ZooTest : Test { /* ... */ }
-    }
-    ```
-  - Do NOT use:
-    ```csharp
-    namespace Bootstrapper.Foo.Bar.Tests { /* ... */ } // ❌
-    namespace Bootstrapper.Foo.Bar.Benchmarks { /* ... */ } // ❌
-    ```
-- The unit tests for the Bootstrapper.Foo assembly live in the Bootstrapper.Foo.Tests assembly.
-- The functional tests for the Bootstrapper.Foo assembly live in the Bootstrapper.Foo.FunctionalTests assembly.
-- Test class names end with Test and live in the same namespace as the class being tested, e.g., the unit tests for the Boo class that resides in the Bootstrapper.Foo assembly would be named BooTest and placed in the Bootstrapper.Foo namespace in the Bootstrapper.Foo.Tests assembly.
-- Modify the associated .csproj file to override the root namespace so the compiled namespace matches the SUT. Example:
-  ```xml
-  <PropertyGroup>
-    <RootNamespace>Bootstrapper.Foo</RootNamespace>
-  </PropertyGroup>
-  ```
 - When generating test scaffolding automatically, resolve the SUT's namespace from the source file (or project/assembly metadata) and use that exact namespace in the test file header.
 
 - Notes:
@@ -91,7 +91,7 @@ using System.Globalization;
 using Codebelt.Extensions.Xunit;
 using Xunit;
 
-namespace Bootstrapper
+namespace YourProject
 {
     /// <summary>
     /// Tests for the <see cref="DateSpan"/> class.
@@ -149,33 +149,61 @@ namespace Bootstrapper
 - Before overriding methods, verify that the method is virtual or abstract; this rule also applies to mocks.
 - Never mock IMarshaller; always use a new instance of JsonMarshaller.
 
-For further examples, refer to existing test files such as  
-[`test/Bootstrapper.Core.Tests/DisposableTest.cs`](test/Bootstrapper.Core.Tests/DisposableTest.cs) and  [`test/Bootstrapper.Core.Tests/Security/HashFactoryTest.cs`](test/Bootstrapper.Core.Tests/Security/HashFactoryTest.cs).
+## 9. Avoid `InternalsVisibleTo` in Tests
+
+- **Do not** use `InternalsVisibleTo` to access internal types or members from test projects.
+- Prefer **indirect testing via public APIs** that depend on the internal implementation (public facades, public extension methods, or other public entry points).
+
+### Preferred Pattern
+
+**Pattern name:** Public Facade Testing (also referred to as *Public API Proxy Testing*)
+
+**Description:**  
+Internal classes and methods must be validated by exercising the public API that consumes them. Tests should assert observable behavior exposed by the public surface rather than targeting internal implementation details directly.
+
+### Example Mapping
+
+- **Internal helper:** `DelimitedString` (internal static class)  
+- **Public API:** `TestOutputHelperExtensions.WriteLines()` (public extension method)  
+- **Test strategy:** Write tests for `WriteLines()` and verify its public behavior. The internal call to `DelimitedString.Create()` is exercised implicitly.
+
+### Benefits
+
+- Avoids exposing internal types to test assemblies.
+- Ensures tests reflect real-world usage patterns.
+- Maintains strong encapsulation and a clean public API.
+- Tests remain resilient to internal refactoring as long as public behavior is preserved.
+
+### When to Apply
+
+- Internal logic is fully exercised through existing public APIs.
+- Public entry points provide sufficient coverage of internal code paths.
+- The internal implementation exists solely as a helper or utility for public-facing functionality.
 
 ---
-description: 'Writing Performance Tests in Bootstrapper'
+description: 'Writing Performance Tests'
 applyTo: "tuning/**, **/*Benchmark*.cs"
 ---
 
-# Writing Performance Tests in Bootstrapper
-This document provides guidance for writing performance tests (benchmarks) in the Bootstrapper codebase using BenchmarkDotNet. Follow these guidelines to keep benchmarks consistent, readable, and comparable.
+# Writing Performance Tests
+This document provides guidance for writing performance tests (benchmarks) for a project/solution using BenchmarkDotNet. Follow these guidelines to keep benchmarks consistent, readable, and comparable.
 
 ## 1. Naming and Placement
 
 - Place micro- and component-benchmarks under the `tuning/` folder or in projects named `*.Benchmarks`.
 - Place benchmark files in the appropriate benchmark project and folder structure.
 - Use namespaces that mirror the source code structure, e.g. do not suffix with `Benchmarks`.
-- Namespace rule: DO NOT append `.Benchmarks` to the namespace. Benchmarks must live in the same namespace as the production assembly. Example: if the production assembly uses `namespace Bootstrapper.Security.Cryptography`, the benchmark file should also use:
+Namespace rule: DO NOT append `.Benchmarks` to the namespace. Benchmarks must live in the same namespace as the production assembly. Example: if the production assembly uses `namespace YourProject.Security.Cryptography`, the benchmark file should also use:
   ```
-  namespace Bootstrapper.Security.Cryptography
+  namespace YourProject.Security.Cryptography
   {
       public class Sha512256Benchmark { /* ... */ }
   }
   ```
 The class name must end with `Benchmark`, but the namespace must match the assembly (no `.Benchmarks` suffix).
-- The benchmarks for the Bootstrapper.Bar assembly live in the Bootstrapper.Bar.Benchmarks assembly.
-- Benchmark class names end with Benchmark and live in the same namespace as the class being measured, e.g., the benchmarks for the Zoo class that resides in the Bootstrapper.Bar assembly would be named ZooBenchmark and placed in the Bootstrapper.Bar namespace in the Bootstrapper.Bar.Benchmarks assembly.
-- Modify the associated .csproj file to override the root namespace, e.g., <RootNamespace>Bootstrapper.Bar</RootNamespace>.
+- The benchmarks for the YourProject.Bar assembly live in the YourProject.Bar.Benchmarks assembly.
+- Benchmark class names end with Benchmark and live in the same namespace as the class being measured, e.g., the benchmarks for the Zoo class that resides in the YourProject.Bar assembly would be named ZooBenchmark and placed in the YourProject.Bar namespace in the YourProject.Bar.Benchmarks assembly.
+- Modify the associated .csproj file to override the root namespace, e.g., <RootNamespace>YourProject.Bar</RootNamespace>.
 
 ## 2. Attributes and Configuration
 
@@ -206,7 +234,7 @@ The class name must end with `Benchmark`, but the namespace must match the assem
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 
-namespace Bootstrapper
+namespace YourProject
 {
     [MemoryDiagnoser]
     [GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
@@ -244,15 +272,14 @@ namespace Bootstrapper
 - If a benchmark exposes regressions or optimizations, add a short note in the benchmark file referencing the relevant issue or PR.
 - For any shared helpers for benchmarking, prefer small utility classes inside the `tuning` projects rather than cross-cutting changes to production code.
 
-For further examples, refer to the benchmark files under the `tuning/` folder such as `tuning/Bootstrapper.Core.Benchmarks/DateSpanBenchmark.cs` and `tuning/Bootstrapper.Security.Cryptography.Benchmarks/Sha512256Benchmark.cs`.
+For further examples, refer to the benchmark files under the `tuning/` folder.
 
 ---
-description: 'Writing XML documentation in Bootstrapper'
+description: 'Writing XML documentation'
 applyTo: "**/*.cs"
 ---
 
-# Writing XML documentation in Bootstrapper
-
+# Writing XML documentation
 This document provides instructions for writing XML documentation.
 
 ## 1. Documentation Style
@@ -265,12 +292,12 @@ This document provides instructions for writing XML documentation.
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Bootstrapper.Collections.Generic;
-using Bootstrapper.Configuration;
-using Bootstrapper.IO;
-using Bootstrapper.Text;
+using Cuemon.Collections.Generic;
+using Cuemon.Configuration;
+using Cuemon.IO;
+using Cuemon.Text;
 
-namespace Bootstrapper.Security
+namespace Cuemon.Security
 {
     /// <summary>
     /// Represents the base class from which all implementations of hash algorithms and checksums should derive.
@@ -540,7 +567,7 @@ namespace Bootstrapper.Security
     }
 }
 
-namespace Bootstrapper.Security
+namespace Cuemon.Security
 {
     /// <summary>
     /// Configuration options for <see cref="FowlerNollVoHash"/>.
