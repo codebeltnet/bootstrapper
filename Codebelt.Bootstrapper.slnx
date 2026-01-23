@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/app/">
+    <Project Path="app/Codebelt.Bootstrapper.Console.App/Codebelt.Bootstrapper.Console.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.MinimalConsole.App/Codebelt.Bootstrapper.MinimalConsole.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.MinimalWeb.App/Codebelt.Bootstrapper.MinimalWeb.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.MinimalWebApi.App/Codebelt.Bootstrapper.MinimalWebApi.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.MinimalWebApp.App/Codebelt.Bootstrapper.MinimalWebApp.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.MinimalWebMvc.App/Codebelt.Bootstrapper.MinimalWebMvc.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.MinimalWorker.App/Codebelt.Bootstrapper.MinimalWorker.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.Web.App/Codebelt.Bootstrapper.Web.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.WebApi.App/Codebelt.Bootstrapper.WebApi.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.WebApp.App/Codebelt.Bootstrapper.WebApp.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.WebMvc.App/Codebelt.Bootstrapper.WebMvc.App.csproj" />
+    <Project Path="app/Codebelt.Bootstrapper.Worker.App/Codebelt.Bootstrapper.Worker.App.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Codebelt.Bootstrapper.Console/Codebelt.Bootstrapper.Console.csproj" />
+    <Project Path="src/Codebelt.Bootstrapper.Web/Codebelt.Bootstrapper.Web.csproj" />
+    <Project Path="src/Codebelt.Bootstrapper.Worker/Codebelt.Bootstrapper.Worker.csproj" />
+    <Project Path="src/Codebelt.Bootstrapper/Codebelt.Bootstrapper.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Codebelt.Bootstrapper.Console.FunctionalTests/Codebelt.Bootstrapper.Console.FunctionalTests.csproj" />
+    <Project Path="test/Codebelt.Bootstrapper.FunctionalTests/Codebelt.Bootstrapper.FunctionalTests.csproj" />
+    <Project Path="test/Codebelt.Bootstrapper.Tests/Codebelt.Bootstrapper.Tests.csproj" />
+    <Project Path="test/Codebelt.Bootstrapper.Web.FunctionalTests/Codebelt.Bootstrapper.Web.FunctionalTests.csproj" />
+    <Project Path="test/Codebelt.Bootstrapper.Worker.FunctionalTests/Codebelt.Bootstrapper.Worker.FunctionalTests.csproj" />
+  </Folder>
+</Solution>
