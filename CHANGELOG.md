@@ -6,7 +6,18 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [5.0.6] - 2026-03-29
 
-This is a service update that focuses on package dependencies.
+This is a patch release covering routine dependency updates across all supported target frameworks, tooling maintenance, and CI pipeline improvements.
+
+### Changed
+
+- Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting bumped to 9.0.14 for net9 and to 10.0.5 for net10,
+- coverlet.collector and coverlet.msbuild bumped to 8.0.1,
+- DocFX image updated from 2.78.4 to 2.78.5 in Dockerfile.docfx,
+- Bootstrap CSS distribution assets refreshed in MinimalWebApp and MinimalWebMvc sample applications,
+- CI pipeline updated to consume jobs-nuget-push@v3,
+- Test environment configuration split into separate Docker entries for net9 and net10 with discrete versioned image tags,
+- PackageReleaseNotes injection in Directory.Build.targets simplified to use System.IO.File::ReadAllText instead of ReadLinesFromFile,
+- bump-nuget.py extended with a carter source-package mapping for Codebelt.Extensions.Carter.
 
 ## [5.0.5] - 2026-03-01
 
@@ -210,3 +221,22 @@ Highlighted features included in this release:
 - HostBuilderExtensions class in the Codebelt.Bootstrapper.Worker namespace that consist of extension methods for the IHostBuilder interface: UseWorkerStartup
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application
+
+[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.6...HEAD
+[5.0.6]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.5...v5.0.6
+[5.0.5]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.6...v5.0.0
+[4.0.6]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.5...v4.0.6
+[4.0.5]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.4...v4.0.5
+[4.0.4]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.3...v4.0.4
+[4.0.3]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.2...v4.0.3
+[4.0.2]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/codebeltnet/bootstrapper/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/codebeltnet/bootstrapper/compare/v3.0.1...v4.0.0
+[3.0.1]: https://github.com/codebeltnet/bootstrapper/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/codebeltnet/bootstrapper/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/codebeltnet/bootstrapper/compare/v1.3.0...v2.0.0
