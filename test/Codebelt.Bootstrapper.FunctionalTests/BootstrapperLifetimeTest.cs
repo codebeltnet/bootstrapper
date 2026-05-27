@@ -57,5 +57,22 @@ namespace Codebelt.Bootstrapper
 
             Assert.True(stopping && stopped);
         }
+
+        [Fact]
+        public void Dispose_ShouldDisposeWrappedHostLifetime()
+        {
+            using var test = HostTestFactory.Create(services =>
+            {
+                services.AddXunitTestLoggingOutputHelperAccessor();
+                services.AddXunitTestLogging(TestOutput);
+            }, hb =>
+            {
+                hb.UseBootstrapperLifetime();
+            }, new TestHostFixture());
+
+            var bootstrapperLifetime = Assert.IsType<BootstrapperLifetime>(test.Host.Services.GetRequiredService<IHostLifetime>());
+
+            bootstrapperLifetime.Dispose();
+        }
     }
 }

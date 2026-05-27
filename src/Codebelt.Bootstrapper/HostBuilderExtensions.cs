@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
+using System.IO;
+using System.Reflection;
 
 namespace Codebelt.Bootstrapper
 {
@@ -35,6 +38,26 @@ namespace Codebelt.Bootstrapper
             return hostBuilder.ConfigureServices((context, services) =>
             {
                 services.AddSingleton<IStartupFactory<TStartup>>(new StartupFactory<TStartup>(services, context.Configuration, context.HostingEnvironment));
+            });
+        }
+
+        /// <summary>
+        /// Adds conventional environment defaults for local development.
+        /// </summary>
+        /// <typeparam name="TStartup">The type of the startup class used to resolve user secrets.</typeparam>
+        /// <param name="hostBuilder">The <see cref="IHostBuilder" /> to configure.</param>
+        /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+        /// <remarks>
+        /// When the current environment is local development, this method adds user secrets for <typeparamref name="TStartup"/> to the application configuration.
+        /// </remarks>
+        public static IHostBuilder UseBootstrapperEnvironmentDefaults<TStartup>(this IHostBuilder hostBuilder) where TStartup : StartupRoot
+        {
+            return hostBuilder.ConfigureAppConfiguration((context, builder) =>
+            {
+                var environment = context.HostingEnvironment;
+                if (!environment.IsLocalDevelopment()) { return; }
+                var reloadOnChange = context.Configuration.GetValue("hostBuilder:reloadConfigOnChange", defaultValue: true);
+                builder.AddUserSecrets<TStartup>(optional: true, reloadOnChange: reloadOnChange);
             });
         }
     }

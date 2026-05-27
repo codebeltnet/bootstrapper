@@ -16,6 +16,7 @@ namespace Codebelt.Bootstrapper.Worker
         {
             var hb = Host.CreateApplicationBuilder(args);
             hb.UseBootstrapperLifetime();
+            hb.UseBootstrapperEnvironmentDefaults();
             return hb;
         }
     }

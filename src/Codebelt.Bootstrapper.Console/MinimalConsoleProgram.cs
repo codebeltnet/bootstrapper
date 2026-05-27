@@ -29,6 +29,7 @@ namespace Codebelt.Bootstrapper.Console
         {
             var hb = Host.CreateApplicationBuilder(args);
             hb.UseBootstrapperLifetime();
+            hb.UseBootstrapperEnvironmentDefaults();
             hb.UseBootstrapperProgram(programType);
             hb.UseMinimalConsoleProgram();
             return hb;

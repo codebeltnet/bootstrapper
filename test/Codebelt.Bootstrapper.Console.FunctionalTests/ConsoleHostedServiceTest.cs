@@ -223,5 +223,53 @@ namespace Codebelt.Bootstrapper.Console
             var loggerStore = test.Host.Services.GetRequiredService<ILogger<TestConsoleStartupWithException>>().GetTestStore();
             Assert.DoesNotContain(loggerStore.Query(), entry => entry.Message.Contains("Fatal error") && entry.Message.Contains("activating"));
         }
+
+        [Fact]
+        public async Task StartAsync_ShouldLogUnableToActivateInstance_WhenStartupIsNullAndSuppressStatusMessagesIsFalse()
+        {
+            await using var test = HostTestFactory.Create(services =>
+            {
+                services.AddXunitTestLogging(TestOutput);
+                services.Configure<ConsoleLifetimeOptions>(options =>
+                {
+                    options.SuppressStatusMessages = false;
+                });
+                services.AddSingleton<global::Codebelt.Bootstrapper.IStartupFactory<TestConsoleStartup>>(new NullStartupFactory<TestConsoleStartup>());
+            }, hb =>
+            {
+                hb.UseBootstrapperLifetime()
+                    .UseConsoleStartup<TestConsoleStartup>();
+            });
+
+            await test.Host.StartAsync();
+            await test.Host.StopAsync();
+
+            var loggerStore = test.Host.Services.GetRequiredService<ILogger<TestConsoleStartup>>().GetTestStore();
+            Assert.Contains(loggerStore.Query(), entry => entry.Message.Contains("Unable to activate"));
+        }
+
+        [Fact]
+        public async Task StartAsync_ShouldNotLogUnableToActivateInstance_WhenStartupIsNullAndSuppressStatusMessagesIsTrue()
+        {
+            await using var test = HostTestFactory.Create(services =>
+            {
+                services.AddXunitTestLogging(TestOutput);
+                services.Configure<ConsoleLifetimeOptions>(options =>
+                {
+                    options.SuppressStatusMessages = true;
+                });
+                services.AddSingleton<global::Codebelt.Bootstrapper.IStartupFactory<TestConsoleStartup>>(new NullStartupFactory<TestConsoleStartup>());
+            }, hb =>
+            {
+                hb.UseBootstrapperLifetime()
+                    .UseConsoleStartup<TestConsoleStartup>();
+            });
+
+            await test.Host.StartAsync();
+            await test.Host.StopAsync();
+
+            var loggerStore = test.Host.Services.GetRequiredService<ILogger<TestConsoleStartup>>().GetTestStore();
+            Assert.DoesNotContain(loggerStore.Query(), entry => entry.Message.Contains("Unable to activate"));
+        }
     }
 }

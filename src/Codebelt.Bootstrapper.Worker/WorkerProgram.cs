@@ -18,6 +18,7 @@ namespace Codebelt.Bootstrapper.Worker
         {
             return Host.CreateDefaultBuilder(args)
                 .UseBootstrapperLifetime()
+                .UseBootstrapperEnvironmentDefaults<TStartup>()
                 .UseBootstrapperStartup<TStartup>();
         }
     }
