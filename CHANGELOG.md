@@ -4,9 +4,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.0.8] - 2026-05-26
+## [5.1.0] - 2026-05-28
 
-This is a service update that focuses on package dependencies.
+This is a minor release focused on environment configuration defaults for local development, expanded test coverage to 95%, dependency updates, and CI/CD improvements for macOS testing.
+
+### Added
+
+- UseBootstrapperEnvironmentDefaults extension method on IHostApplicationBuilder to add conventional environment defaults and user secrets for local development,
+- UseBootstrapperEnvironmentDefaults extension method on IHostBuilder to add user secrets for local development,
+- Comprehensive test coverage across bootstrapper console, web, and worker modules including program creation, startup configuration, hosted service initialization, and lifetime management.
+
+### Changed
+
+- Microsoft.NET.Test.Sdk bumped from 18.4.0 to 18.6.0,
+- coverlet.collector and coverlet.msbuild bumped from 10.0.0 to 10.0.1,
+- Target framework packages updated to latest available versions for net9 and net10,
+- DocFX base image updated from nginx 1.30.0-alpine to 1.31.0-alpine,
+- CI pipeline enhanced with optional macOS test matrix for X64 and ARM64 architectures across Debug and Release configurations.
 
 ## [5.0.7] - 2026-04-18
 
@@ -230,7 +244,9 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application
 
-[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.6...HEAD
+[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.7...v5.1.0
+[5.0.7]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.6...v5.0.7
 [5.0.6]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.4...v5.0.5
 [5.0.4]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.3...v5.0.4
