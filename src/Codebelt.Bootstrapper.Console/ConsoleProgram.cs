@@ -19,6 +19,7 @@ namespace Codebelt.Bootstrapper.Console
             return Host.CreateDefaultBuilder(args)
                 .UseBootstrapperLifetime()
                 .UseBootstrapperStartup<TStartup>()
+                .UseBootstrapperEnvironmentDefaults<TStartup>()
                 .UseConsoleStartup<TStartup>();
         }
     }

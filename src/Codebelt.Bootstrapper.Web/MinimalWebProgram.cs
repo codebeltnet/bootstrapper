@@ -17,6 +17,7 @@ namespace Codebelt.Bootstrapper.Web
         {
             var hb = WebApplication.CreateBuilder(args);
             hb.UseBootstrapperLifetime();
+            hb.UseBootstrapperEnvironmentDefaults();
             return hb;
         }
     }

@@ -19,6 +19,7 @@ namespace Codebelt.Bootstrapper.Web
         {
             return Host.CreateDefaultBuilder(args)
                 .UseBootstrapperLifetime()
+                .UseBootstrapperEnvironmentDefaults<TStartup>()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<TStartup>();

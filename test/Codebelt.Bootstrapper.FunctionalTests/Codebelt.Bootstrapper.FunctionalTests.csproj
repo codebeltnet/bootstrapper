@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Codebelt.Bootstrapper</RootNamespace>
+    <UserSecretsId>dotnet-Codebelt.Bootstrapper.FunctionalTests-279740fe-8d11-4f29-8fa1-972f5a9dc817</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
