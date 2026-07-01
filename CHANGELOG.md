@@ -6,7 +6,18 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [5.1.2] - 2026-07-01
 
-This is a service update that focuses on package dependencies.
+This is a patch release focused on dependency upgrades for security and stability, comprehensive API documentation enhancements, and CI pipeline robustness improvements.
+
+### Changed
+
+- All NuGet dependencies upgraded to latest patch versions: Codebelt.Extensions.Swashbuckle.AspNetCore to 10.2.3, Codebelt.Extensions.Xunit.App to 11.1.1, Cuemon.Core and Cuemon.Extensions.Hosting to 10.5.4, Microsoft.NET.Test.Sdk to 18.7.0, and all Microsoft.AspNetCore and Microsoft.Extensions packages for net9 (9.0.17) and net10 (10.0.9) to latest patch releases,
+- DocFX configuration refactored to separate type/namespace overwrite files from conceptual content while maintaining inclusion in build process,
+- AGENTS.md expanded with comprehensive DocFX maintenance section covering type/namespace documentation requirements, realistic code examples, TFM-selection patterns, verification workflows, and completion gates,
+- DocFX nginx base image bumped to 1.31.2.
+
+### Fixed
+
+- CI deployment job conditional refined to use explicit job-result checks (`always() + needs.<job>.result == 'success'`) instead of simple skip predicates, ensuring skipped optional jobs (such as disabled macOS matrix) do not suppress deployment while keeping failures in required jobs from proceeding.
 
 ## [5.1.1] - 2026-06-06
 
@@ -252,7 +263,9 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application
 
-[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.0...HEAD
+[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.2...HEAD
+[5.1.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.1...v5.1.2
+[5.1.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.7...v5.1.0
 [5.0.7]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.6...v5.0.7
 [5.0.6]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.5...v5.0.6
