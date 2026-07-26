@@ -49,35 +49,53 @@ namespace Codebelt.Bootstrapper.Console
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger = _provider.GetRequiredService<ILogger<TStartup>>();
-            var startup = _factory.Instance;
+            TStartup startup = _factory.Instance;
             if (startup != null)
             {
                 startup.ConfigureConsole(_provider);
-                _events.OnApplicationStartedCallback += () =>
-                {
-                    _runAsyncTask = Task.Run(async () =>
-                    {
-                        try
-                        {
-                            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
-                            await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
-                            _ranToCompletion = true;
-                        }
-                        catch (Exception e)
-                        {
-                            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeof(TStartup).FullName, e); }
-                        }
-                    }, cancellationToken);
-
-                    StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
-                };
+                _events.OnApplicationStartedCallback += () => StartRunAsync(startup, cancellationToken);
             }
             else
             {
-                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeof(TStartup).FullName); }
+                LogUnableToActivate(typeof(TStartup).FullName);
             }
 
             return Task.CompletedTask;
+        }
+
+        private void StartRunAsync(TStartup startup, CancellationToken cancellationToken)
+        {
+            _runAsyncTask = Task.Run(() => RunAsync(startup, cancellationToken), cancellationToken);
+            _ = StartWaitForCompletionOfRunAsync();
+        }
+
+        private async Task RunAsync(TStartup startup, CancellationToken cancellationToken)
+        {
+            try
+            {
+                LogRunAsyncStarted();
+                await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
+                _ranToCompletion = true;
+            }
+            catch (Exception e)
+            {
+                LogFatalError(typeof(TStartup).FullName, e);
+            }
+        }
+
+        private void LogRunAsyncStarted()
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
+        }
+
+        private void LogUnableToActivate(string typeFullName)
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeFullName); }
+        }
+
+        private void LogFatalError(string typeFullName, Exception exception)
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeFullName, exception); }
         }
 
         private async Task StartWaitForCompletionOfRunAsync()

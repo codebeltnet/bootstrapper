@@ -47,39 +47,60 @@ namespace Codebelt.Bootstrapper.Console
         /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _events.OnApplicationStartedCallback += () =>
-            {
-                var program = _factory.Instance;
-                var programType = program?.GetType() ?? typeof(MinimalConsoleProgram);
-                var loggerType = typeof(ILogger<>).MakeGenericType(programType);
-
-                _logger = _provider.GetRequiredService(loggerType) as ILogger;
-
-                _runAsyncTask = Task.Run(async () =>
-                {
-                    try
-                    {
-                        if (program != null)
-                        {
-                            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
-                            await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
-                            _ranToCompletion = true;
-                        }
-                        else
-                        {
-                            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(programType.FullName); }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(programType.FullName, e); }
-                    }
-                }, cancellationToken);
-
-                StartWaitForCompletionOfRunAsync().ConfigureAwait(false);
-            };
+            _events.OnApplicationStartedCallback += () => StartRunAsync(cancellationToken);
 
             return Task.CompletedTask;
+        }
+
+        private void StartRunAsync(CancellationToken cancellationToken)
+        {
+            MinimalConsoleProgram program = _factory.Instance;
+            Type programType = program?.GetType() ?? typeof(MinimalConsoleProgram);
+
+            _logger = ResolveLogger(programType);
+            _runAsyncTask = Task.Run(() => RunAsync(program, programType, cancellationToken), cancellationToken);
+            _ = StartWaitForCompletionOfRunAsync();
+        }
+
+        private ILogger ResolveLogger(Type programType)
+        {
+            Type loggerType = typeof(ILogger<>).MakeGenericType(programType);
+            return _provider.GetRequiredService(loggerType) as ILogger;
+        }
+
+        private async Task RunAsync(MinimalConsoleProgram program, Type programType, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (program == null)
+                {
+                    LogUnableToActivate(programType.FullName);
+                    return;
+                }
+
+                LogRunAsyncStarted();
+                await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
+                _ranToCompletion = true;
+            }
+            catch (Exception e)
+            {
+                LogFatalError(programType.FullName, e);
+            }
+        }
+
+        private void LogRunAsyncStarted()
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
+        }
+
+        private void LogUnableToActivate(string typeFullName)
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeFullName); }
+        }
+
+        private void LogFatalError(string typeFullName, Exception exception)
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeFullName, exception); }
         }
 
         private async Task StartWaitForCompletionOfRunAsync()
