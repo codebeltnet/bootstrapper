@@ -20,6 +20,7 @@
     <Project Path="src/Codebelt.Bootstrapper/Codebelt.Bootstrapper.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/Codebelt.Bootstrapper.Console.Tests/Codebelt.Bootstrapper.Console.Tests.csproj" />
     <Project Path="test/Codebelt.Bootstrapper.Console.FunctionalTests/Codebelt.Bootstrapper.Console.FunctionalTests.csproj" />
     <Project Path="test/Codebelt.Bootstrapper.FunctionalTests/Codebelt.Bootstrapper.FunctionalTests.csproj" />
     <Project Path="test/Codebelt.Bootstrapper.Tests/Codebelt.Bootstrapper.Tests.csproj" />
