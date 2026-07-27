@@ -4,6 +4,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.2.0] - 2026-07-27
+
+This is a minor release introducing command-line context infrastructure, comprehensive test coverage for console hosted services, dependency updates, and build configuration hardening.
+
+### Added
+
+- CommandLineContext class in the Codebelt.Bootstrapper namespace to encapsulate command-line arguments for convenient access,
+- Comprehensive unit test coverage for CommandLineContext, ConsoleHostedService, and MinimalConsoleHostedService to ensure robust argument handling and service lifecycle management.
+
+### Changed
+
+- All NuGet dependencies upgraded to latest stable releases: Codebelt.Extensions.Swashbuckle.AspNetCore to 10.2.4, Codebelt.Extensions.Xunit.App to 11.1.2, Cuemon.Core and Cuemon.Extensions.Hosting to 10.5.5, Microsoft.NET.Test.Sdk to 18.8.1, and all Microsoft.AspNetCore and Microsoft.Extensions packages for net9 (9.0.18) and net10 (10.0.10) to latest patch releases,
+- Build analyzer configuration enhanced with warning suppressions (7035, CA2260, S6618), code style enforcement enabled in build process, and MinVer tag prefix configured to 'v',
+- ConsoleHostedService and MinimalConsoleHostedService refactored to extract nested callback logic into focused private methods (StartRunAsync, RunAsync, ResolveLogger, LogRunAsyncStarted, LogUnableToActivate, LogFatalError) for improved code clarity, testability, and maintainability,
+- DocFX nginx base image adjusted to 1.31-alpine to use stable release channel for documentation build infrastructure.
+
 ## [5.1.2] - 2026-07-01
 
 This is a patch release focused on dependency upgrades for security and stability, comprehensive API documentation enhancements, and CI pipeline robustness improvements.
@@ -263,7 +279,7 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application
 
-[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.2...HEAD
+[5.2.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.2...v5.2.0
 [5.1.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.1...v5.1.2
 [5.1.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.0.7...v5.1.0
