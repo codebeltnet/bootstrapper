@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.2.1] - 2026-08-16
+
+This is a service update that focuses on package dependencies.
+
 ## [5.2.0] - 2026-07-27
 
 This is a minor release introducing command-line context infrastructure, comprehensive test coverage for console hosted services, dependency updates, and build configuration hardening.
