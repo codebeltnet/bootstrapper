@@ -4,9 +4,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [5.2.2] - 2026-09-14
+## [5.2.2] - 2026-09-15
 
-This is a service update that focuses on package dependencies.
+This is a patch release focused on test infrastructure modernization, comprehensive dependency updates, and enhanced contributing guidelines.
+
+### Changed
+
+- Test infrastructure migrated from coverlet to Microsoft.Testing.Extensions.CodeCoverage integrated with xunit v4 and Microsoft.Testing.Platform,
+- Codebelt.Extensions.Xunit.App upgraded from 11.2.1 to 12.0.1 for xunit v4 compatibility,
+- xunit test framework packages upgraded to v4 (xunit.v3 from 3.2.2 to 4.0.1, xunit.v3.runner.console from 3.2.2 to 4.0.1, xunit.runner.visualstudio from 3.1.5 to 4.0.0),
+- MinVer from 7.0.0 to 8.0.0,
+- NuGet dependencies upgraded to latest compatible versions: Codebelt.Extensions.Swashbuckle.AspNetCore from 10.2.5 to 10.2.6, Cuemon.Core and Cuemon.Extensions.Hosting from 10.7.0 to 10.7.1, Microsoft.NET.Test.Sdk from 18.9.0 to 18.10.1, and net9/net10 Microsoft.AspNetCore and Microsoft.Extensions packages to latest patch releases,
+- Contributing guidelines restructured with comprehensive documentation for build, test, package, and infrastructure workflows including test matrix details and environment requirements.
+
+### Removed
+
+- coverlet.msbuild and coverlet.collector code coverage tools replaced by integrated Microsoft.Testing.Extensions.CodeCoverage.
 
 ## [Unreleased]
 
@@ -298,7 +311,8 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner,
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application.
 
-[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.1...HEAD
+[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.2...HEAD
+[5.2.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.1...v5.2.2
 [5.2.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.0...v5.2.1
 [5.2.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.2...v5.2.0
 [5.1.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.1...v5.1.2
