@@ -4,6 +4,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [5.2.3] - 2026-10-18
+
+This patch release updates dependencies, aligns MTP coverage and hang diagnostics with the shared CI workflow, and refreshes documentation hosting and contributor guidance.
+
+### Added
+
+- Codebelt.Coverlet.MTP 10.1.0 and Microsoft.Testing.Extensions.HangDump 2.5.1 in the shared test dependencies for OpenCover coverage and hang diagnostics,
+- DocFX nginx configuration on port 8080, with immutable caching for fingerprinted assets and disabled caching for stable URLs.
+
+### Changed
+
+- Codebelt.Extensions.Swashbuckle.AspNetCore from 10.2.6 to 10.3.0, Codebelt.Extensions.Xunit.App from 12.0.1 to 12.0.2, and Cuemon.Core and Cuemon.Extensions.Hosting from 10.7.1 to 10.8.1,
+- Microsoft.NET.Test.Sdk from 18.10.1 to 18.11.0, xunit.v3 and xunit.v3.runner.console from 4.0.1 to 4.0.2, and xunit.runner.visualstudio from 4.0.0 to 4.0.1,
+- Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting from 9.0.20 to 9.0.21 for net9.0 and from 10.0.12 to 10.0.13 for net10.0,
+- DocFX hosting uses DHI nginx images and the codebeltnet/docfx:2 image; API members use separate pages, the Microsoft-style template is included, and the site has a monthly sitemap,
+- Detailed test, benchmark, and XML documentation instructions moved from .github/copilot-instructions.md into AGENTS.md with their scopes and examples preserved; active guidance references now point to AGENTS.md,
+- Contributor test commands use the MTP --project option,
+- Service-update version selection uses the latest stable Git tag, reuses a pending TBD release, and updates an existing matching changelog section.
+
+### Removed
+
+- Direct Microsoft.Testing.Extensions.CodeCoverage dependency from the shared MTP test configuration.
+
 ## [5.2.2] - 2026-09-15
 
 This is a patch release focused on test infrastructure modernization, comprehensive dependency updates, and enhanced contributing guidelines.
@@ -20,8 +43,6 @@ This is a patch release focused on test infrastructure modernization, comprehens
 ### Removed
 
 - coverlet.msbuild and coverlet.collector code coverage tools replaced by integrated Microsoft.Testing.Extensions.CodeCoverage.
-
-## [Unreleased]
 
 ## [5.2.1] - 2026-08-17
 
@@ -311,7 +332,7 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner,
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application.
 
-[Unreleased]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.2...HEAD
+[5.2.3]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.2...v5.2.3
 [5.2.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.1...v5.2.2
 [5.2.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.0...v5.2.1
 [5.2.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.1.2...v5.2.0
