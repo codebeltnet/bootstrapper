@@ -4,7 +4,7 @@ This document provides guidance for AI agents working in this repository.
 
 ## Project Overview
 
-Codebelt.Bootstrapper is an open-source family of assemblies (MIT license) that provide a uniform and consistent way of bootstrapping .NET code with `Program.cs` paired with `Startup.cs` — or using the new `Minimal` equivalent for all project types. The solution targets .NET 10.0, .NET 9.0, and later. It includes:
+Codebelt.Bootstrapper is an open-source family of assemblies (MIT license) that provide a uniform and consistent way of bootstrapping .NET code with `Program.cs` paired with `Startup.cs` — or using the new `Minimal` equivalent for all project types. The libraries and tests target .NET 10.0 and .NET 11.0; sample applications target .NET 10.0. It includes:
 
 - **Codebelt.Bootstrapper** — Core types and interfaces for all project types.
 - **Codebelt.Bootstrapper.Console** — Implementation optimized for console applications.
