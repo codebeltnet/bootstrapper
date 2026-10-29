@@ -4,24 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Xunit;
 
-namespace Codebelt.Bootstrapper.Worker
+namespace Codebelt.Bootstrapper.Worker;
+
+public class WorkerProgramTest : Test
 {
-    public class WorkerProgramTest : Test
+    public WorkerProgramTest(ITestOutputHelper output) : base(output)
     {
-        public WorkerProgramTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void CreateHostBuilder_ShouldRegisterBootstrapperLifetimeAndStartup()
-        {
-            using var host = TestWorkerProgram.CreateHostBuilderAccessor([]).Build();
+    [Fact]
+    public void CreateHostBuilder_ShouldRegisterBootstrapperLifetimeAndStartup()
+    {
+        using var host = TestWorkerProgram.CreateHostBuilderAccessor([]).Build();
 
-            var lifetime = host.Services.GetRequiredService<IHostLifetime>();
-            var startupFactory = host.Services.GetRequiredService<global::Codebelt.Bootstrapper.IStartupFactory<TestStartup>>();
+        var lifetime = host.Services.GetRequiredService<IHostLifetime>();
+        var startupFactory = host.Services.GetRequiredService<global::Codebelt.Bootstrapper.IStartupFactory<TestStartup>>();
 
-            Assert.IsType<global::Codebelt.Bootstrapper.BootstrapperLifetime>(lifetime);
-            Assert.IsType<global::Codebelt.Bootstrapper.StartupFactory<TestStartup>>(startupFactory);
-        }
+        Assert.IsType<global::Codebelt.Bootstrapper.BootstrapperLifetime>(lifetime);
+        Assert.IsType<global::Codebelt.Bootstrapper.StartupFactory<TestStartup>>(startupFactory);
     }
 }

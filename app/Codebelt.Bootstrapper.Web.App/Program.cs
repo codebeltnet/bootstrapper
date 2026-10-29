@@ -1,14 +1,13 @@
 using Microsoft.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper.Web.App
+namespace Codebelt.Bootstrapper.Web.App;
+
+public class Program : WebProgram<Startup>
 {
-    public class Program : WebProgram<Startup>
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            CreateHostBuilder(args)
-                .Build()
-                .Run();
-        }
+        CreateHostBuilder(args)
+            .Build()
+            .Run();
     }
 }

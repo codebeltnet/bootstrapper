@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Codebelt.Bootstrapper.Assets;
@@ -11,53 +11,52 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Xunit;
 
-namespace Codebelt.Bootstrapper
+namespace Codebelt.Bootstrapper;
+
+public class HostedServiceExtensionsTest : Test
 {
-    public class HostedServiceExtensionsTest : Test
+    public HostedServiceExtensionsTest(ITestOutputHelper output) : base(output)
     {
-        public HostedServiceExtensionsTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public async Task WaitForApplicationStartedAnnouncementAsync_MustWaitForApplicationStarted()
+    {
+        var timeToWait = TimeSpan.FromMilliseconds(500);
+
+        using var test = HostTestFactory.Create(services =>
         {
-        }
-
-        [Fact]
-        public async Task WaitForApplicationStartedAnnouncementAsync_MustWaitForApplicationStarted()
+            services.AddXunitTestLogging(TestOutput);
+            services.AddHostedService<TestBackgroundService>();
+            services.Configure<HostOptions>(o => o.ShutdownTimeout = TimeSpan.FromSeconds(5));
+        }, hb =>
         {
-            var timeToWait = TimeSpan.FromMilliseconds(500);
+            hb.UseBootstrapperLifetime();
+        }, new TestHostFixture());
 
-            using var test = HostTestFactory.Create(services =>
-            {
-                services.AddXunitTestLogging(TestOutput);
-                services.AddHostedService<TestBackgroundService>();
-                services.Configure<HostOptions>(o => o.ShutdownTimeout = TimeSpan.FromSeconds(5));
-            }, hb =>
-            {
-                hb.UseBootstrapperLifetime();
-            }, new TestHostFixture());
+        var lifetimeEvents = test.Host.Services.GetRequiredService<IHostLifetimeEvents>();
 
-            var lifetimeEvents = test.Host.Services.GetRequiredService<IHostLifetimeEvents>();
+        lifetimeEvents.OnApplicationStartedCallback += () =>
+        {
+            Thread.Sleep(timeToWait);
+        };
 
-            lifetimeEvents.OnApplicationStartedCallback += () =>
-            {
-                Thread.Sleep(timeToWait);
-            };
+        var reset = false;
+        lifetimeEvents.OnApplicationStoppingCallback += () =>
+        {
+            reset = true;
+        };
 
-            var reset = false;
-            lifetimeEvents.OnApplicationStoppingCallback += () =>
-            {
-                reset = true;
-            };
+        var bgs = (TestBackgroundService)test.Host.Services.GetRequiredService<IHostedService>();
 
-            var bgs = (TestBackgroundService)test.Host.Services.GetRequiredService<IHostedService>();
+        await test.Host.StartAsync().ConfigureAwait(false);
 
-            await test.Host.StartAsync().ConfigureAwait(false);
+        await Awaiter.RunUntilSuccessfulOrTimeoutAsync(() => reset
+            ? Task.FromResult<ConditionalValue>(new SuccessfulValue())
+            : Task.FromResult<ConditionalValue>(new UnsuccessfulValue())).ConfigureAwait(false);
 
-            await Awaiter.RunUntilSuccessfulOrTimeoutAsync(() => reset
-                ? Task.FromResult<ConditionalValue>(new SuccessfulValue())
-                : Task.FromResult<ConditionalValue>(new UnsuccessfulValue())).ConfigureAwait(false);
+        TestOutput.WriteLine($"{bgs.Elapsed} >= {timeToWait}");
 
-            TestOutput.WriteLine($"{bgs.Elapsed} >= {timeToWait}");
-
-            Assert.True(bgs.Elapsed >= timeToWait, $"{bgs.Elapsed} >= {timeToWait}");
-        }
+        Assert.True(bgs.Elapsed >= timeToWait, $"{bgs.Elapsed} >= {timeToWait}");
     }
 }

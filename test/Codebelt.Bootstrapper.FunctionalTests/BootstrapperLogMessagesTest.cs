@@ -6,26 +6,25 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Codebelt.Bootstrapper
+namespace Codebelt.Bootstrapper;
+
+public class BootstrapperLogMessagesTest : Test
 {
-    public class BootstrapperLogMessagesTest : Test
+    public BootstrapperLogMessagesTest(ITestOutputHelper output) : base(output)
     {
-        public BootstrapperLogMessagesTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void FatalErrorActivating_ShouldWriteCriticalEntry()
-        {
-            using var services = new ServiceCollection()
-                .AddXunitTestLogging(TestOutput)
-                .BuildServiceProvider();
+    [Fact]
+    public void FatalErrorActivating_ShouldWriteCriticalEntry()
+    {
+        using var services = new ServiceCollection()
+            .AddXunitTestLogging(TestOutput)
+            .BuildServiceProvider();
 
-            var logger = services.GetRequiredService<ILogger<BootstrapperLogMessagesTest>>();
+        var logger = services.GetRequiredService<ILogger<BootstrapperLogMessagesTest>>();
 
-            Decorator.EncloseToExpose(logger, false).FatalErrorActivating("Test.Type", new InvalidOperationException("Boom"));
+        Decorator.EncloseToExpose(logger, false).FatalErrorActivating("Test.Type", new InvalidOperationException("Boom"));
 
-            Assert.Contains(logger.GetTestStore().Query(), entry => entry.Message.Contains("Fatal error occurred while activating Test.Type."));
-        }
+        Assert.Contains(logger.GetTestStore().Query(), entry => entry.Message.Contains("Fatal error occurred while activating Test.Type."));
     }
 }

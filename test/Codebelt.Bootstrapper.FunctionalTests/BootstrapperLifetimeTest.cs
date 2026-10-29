@@ -1,78 +1,77 @@
-﻿using Codebelt.Bootstrapper.Assets;
+using Codebelt.Bootstrapper.Assets;
 using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Xunit;
 
-namespace Codebelt.Bootstrapper
+namespace Codebelt.Bootstrapper;
+
+public class BootstrapperLifetimeTest : Test
 {
-    public class BootstrapperLifetimeTest : Test
+    public BootstrapperLifetimeTest(ITestOutputHelper output) : base(output)
     {
-        public BootstrapperLifetimeTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public void OnApplicationStartedCallback_ShouldBeInvokedWhenStartingHost()
+    {
+        var started = false;
+        using var test = HostTestFactory.Create(services =>
         {
-        }
-
-        [Fact]
-        public void OnApplicationStartedCallback_ShouldBeInvokedWhenStartingHost()
+            services.AddXunitTestLoggingOutputHelperAccessor();
+            services.AddXunitTestLogging(TestOutput);
+        }, hb =>
         {
-            var started = false;
-            using var test = HostTestFactory.Create(services =>
-            {
-                services.AddXunitTestLoggingOutputHelperAccessor();
-                services.AddXunitTestLogging(TestOutput);
-            }, hb =>
-            {
-                hb.UseBootstrapperLifetime();
-                hb.UseBootstrapperStartup<TestStartup>();
-            }, new TestHostFixture());
+            hb.UseBootstrapperLifetime();
+            hb.UseBootstrapperStartup<TestStartup>();
+        }, new TestHostFixture());
 
-            test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStartedCallback = () => { started = true; };
+        test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStartedCallback = () => { started = true; };
 
-            test.Host.Start();
+        test.Host.Start();
 
-            Assert.True(started);
-        }
+        Assert.True(started);
+    }
 
-        [Fact]
-        public void OnApplicationStoppingCallback_OnApplicationStoppedCallback_ShouldBeInvokedWhenStoppingHost()
+    [Fact]
+    public void OnApplicationStoppingCallback_OnApplicationStoppedCallback_ShouldBeInvokedWhenStoppingHost()
+    {
+        var stopping = false;
+        var stopped = false;
+        using var test = HostTestFactory.Create(services =>
         {
-            var stopping = false;
-            var stopped = false;
-            using var test = HostTestFactory.Create(services =>
-            {
-                services.AddXunitTestLoggingOutputHelperAccessor();
-                services.AddXunitTestLogging(TestOutput);
-            }, hb =>
-            {
-                hb.UseBootstrapperLifetime();
-                hb.UseBootstrapperStartup<TestStartup>();
-            }, new TestHostFixture());
-
-            test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStoppingCallback = () => { stopping = true; };
-            test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStoppedCallback = () => { stopped = true; };
-
-            test.Host.Start();
-            test.Host.StopAsync().GetAwaiter().GetResult();
-
-            Assert.True(stopping && stopped);
-        }
-
-        [Fact]
-        public void Dispose_ShouldDisposeWrappedHostLifetime()
+            services.AddXunitTestLoggingOutputHelperAccessor();
+            services.AddXunitTestLogging(TestOutput);
+        }, hb =>
         {
-            using var test = HostTestFactory.Create(services =>
-            {
-                services.AddXunitTestLoggingOutputHelperAccessor();
-                services.AddXunitTestLogging(TestOutput);
-            }, hb =>
-            {
-                hb.UseBootstrapperLifetime();
-            }, new TestHostFixture());
+            hb.UseBootstrapperLifetime();
+            hb.UseBootstrapperStartup<TestStartup>();
+        }, new TestHostFixture());
 
-            var bootstrapperLifetime = Assert.IsType<BootstrapperLifetime>(test.Host.Services.GetRequiredService<IHostLifetime>());
+        test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStoppingCallback = () => { stopping = true; };
+        test.Host.Services.GetRequiredService<IHostLifetimeEvents>().OnApplicationStoppedCallback = () => { stopped = true; };
 
-            bootstrapperLifetime.Dispose();
-        }
+        test.Host.Start();
+        test.Host.StopAsync().GetAwaiter().GetResult();
+
+        Assert.True(stopping && stopped);
+    }
+
+    [Fact]
+    public void Dispose_ShouldDisposeWrappedHostLifetime()
+    {
+        using var test = HostTestFactory.Create(services =>
+        {
+            services.AddXunitTestLoggingOutputHelperAccessor();
+            services.AddXunitTestLogging(TestOutput);
+        }, hb =>
+        {
+            hb.UseBootstrapperLifetime();
+        }, new TestHostFixture());
+
+        var bootstrapperLifetime = Assert.IsType<BootstrapperLifetime>(test.Host.Services.GetRequiredService<IHostLifetime>());
+
+        bootstrapperLifetime.Dispose();
     }
 }

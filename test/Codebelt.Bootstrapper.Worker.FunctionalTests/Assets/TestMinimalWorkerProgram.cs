@@ -1,9 +1,8 @@
 using Microsoft.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper.Worker.Assets
+namespace Codebelt.Bootstrapper.Worker.Assets;
+
+internal class TestMinimalWorkerProgram : MinimalWorkerProgram
 {
-    internal class TestMinimalWorkerProgram : MinimalWorkerProgram
-    {
-        public static HostApplicationBuilder CreateHostBuilderAccessor(string[] args) => CreateHostBuilder(args);
-    }
+    public static HostApplicationBuilder CreateHostBuilderAccessor(string[] args) => CreateHostBuilder(args);
 }

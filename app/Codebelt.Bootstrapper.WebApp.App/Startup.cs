@@ -6,45 +6,44 @@ using Microsoft.Extensions.Hosting;
 using Cuemon.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Codebelt.Bootstrapper.WebApp.App
+namespace Codebelt.Bootstrapper.WebApp.App;
+
+public class Startup : WebStartup
 {
-    public class Startup : WebStartup
+    public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
     {
-        public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
+    }
+
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        services.AddRazorPages();
+    }
+
+    public override void ConfigurePipeline(IApplicationBuilder app)
+    {
+        var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
+
+        if (Environment.IsLocalDevelopment())
         {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            services.AddRazorPages();
-        }
-
-        public override void ConfigurePipeline(IApplicationBuilder app)
-        {
-            var logger = app.ApplicationServices.GetRequiredService<ILogger<Startup>>();
-
-            if (Environment.IsLocalDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
-        }
+            endpoints.MapRazorPages();
+        });
     }
 }

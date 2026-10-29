@@ -5,34 +5,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace Codebelt.Bootstrapper.Web.App
+namespace Codebelt.Bootstrapper.Web.App;
+
+public class Startup : WebStartup
 {
-    public class Startup : WebStartup
+    public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
     {
-        public Startup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
+    }
+
+    public override void ConfigureServices(IServiceCollection services)
+    {
+    }
+
+    public override void ConfigurePipeline(IApplicationBuilder app)
+    {
+        if (Environment.IsLocalDevelopment())
         {
+            app.UseDeveloperExceptionPage();
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
         {
-        }
-
-        public override void ConfigurePipeline(IApplicationBuilder app)
-        {
-            if (Environment.IsLocalDevelopment())
+            endpoints.MapGet("/", async context =>
             {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                await context.Response.WriteAsync("Hello World!");
             });
-        }
+        });
     }
 }

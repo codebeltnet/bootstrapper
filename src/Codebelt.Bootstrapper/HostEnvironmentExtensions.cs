@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper
+namespace Codebelt.Bootstrapper;
+
+internal static class HostEnvironmentExtensions
 {
-    internal static class HostEnvironmentExtensions
-    {
-        private const string LocalDevelopment = "LocalDevelopment";
+    private const string LocalDevelopment = "LocalDevelopment";
 
-        internal static bool IsLocalDevelopment(this IHostEnvironment environment)
-        {
-            return environment.IsEnvironment(LocalDevelopment);
-        }
+    internal static bool IsLocalDevelopment(this IHostEnvironment environment)
+    {
+        return environment.IsEnvironment(LocalDevelopment);
     }
 }

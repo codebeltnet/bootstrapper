@@ -8,37 +8,36 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Xunit;
 
-namespace Codebelt.Bootstrapper.Console
+namespace Codebelt.Bootstrapper.Console;
+
+public class ConsoleStartupTest : Test
 {
-    public class ConsoleStartupTest : Test
+    public ConsoleStartupTest(ITestOutputHelper output) : base(output)
     {
-        public ConsoleStartupTest(ITestOutputHelper output) : base(output)
-        {
-        }
+    }
 
-        [Fact]
-        public void ConfigureConsole_ShouldAllowDefaultNoOpImplementation()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>
-                {
-                    { "TestKey", "TestValue" }
-                })
-                .Build();
-
-            var environment = new HostingEnvironment
+    [Fact]
+    public void ConfigureConsole_ShouldAllowDefaultNoOpImplementation()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
             {
-                EnvironmentName = Environments.Development,
-                ApplicationName = "TestApp",
-                ContentRootPath = Directory.GetCurrentDirectory()
-            };
+                { "TestKey", "TestValue" }
+            })
+            .Build();
 
-            var startup = new TestConsoleStartup(configuration, environment);
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var environment = new HostingEnvironment
+        {
+            EnvironmentName = Environments.Development,
+            ApplicationName = "TestApp",
+            ContentRootPath = Directory.GetCurrentDirectory()
+        };
 
-            var exception = Record.Exception(() => startup.ConfigureConsole(serviceProvider));
+        var startup = new TestConsoleStartup(configuration, environment);
+        var serviceProvider = new ServiceCollection().BuildServiceProvider();
 
-            Assert.Null(exception);
-        }
+        var exception = Record.Exception(() => startup.ConfigureConsole(serviceProvider));
+
+        Assert.Null(exception);
     }
 }
