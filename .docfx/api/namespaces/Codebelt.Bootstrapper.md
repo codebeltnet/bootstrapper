@@ -1,4 +1,4 @@
-﻿---
+---
 uid: Codebelt.Bootstrapper
 summary: *content
 ---
