@@ -23,7 +23,7 @@ permissions:
 jobs:
   init:
     name: initialize
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       run-mac-tests: ${{ steps.vars.outputs.run-mac-tests }}
       run-privileged-jobs: ${{ steps.vars.outputs.run-privileged-jobs }}
@@ -63,7 +63,7 @@ jobs:
       configuration: ${{ matrix.configuration }}
       strong-name-key-filename: ${{ needs.init.outputs.strong-name-key-filename }}
       build-switches: ${{ needs.init.outputs.build-switches }}
-      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-26.04-arm' || 'ubuntu-26.04' }}
       upload-build-artifact-name: build-${{ matrix.configuration }}-${{ matrix.arch }}
     secrets:
       GCP_TOKEN: ${{ secrets.GCP_TOKEN }}
@@ -91,7 +91,7 @@ jobs:
         configuration: [Debug, Release]
     uses: codebeltnet/jobs-dotnet-test/.github/workflows/default.yml@v3
     with:
-      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+      runs-on: ${{ matrix.arch == 'ARM64' && 'ubuntu-26.04-arm' || 'ubuntu-26.04' }}
       projects: test/**/*.csproj
       configuration: ${{ matrix.configuration }}
       verbosity-level: normal
@@ -99,6 +99,32 @@ jobs:
       restore: true
       build: true
       download-pattern: build-${{ matrix.configuration }}-${{ matrix.arch }}
+
+  test_frameworks:
+    name: test-${{ matrix.framework }}
+    runs-on: ubuntu-26.04
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [net10.0, net11.0]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            10.0.x
+            11.0.x
+      - name: Test each project on ${{ matrix.framework }}
+        shell: bash
+        run: |
+          mapfile -d '' projects < <(find test -name '*Tests.csproj' -print0)
+          if [[ ${#projects[@]} -eq 0 ]]; then
+            echo '::error::No test projects were found.'
+            exit 1
+          fi
+          for project in "${projects[@]}"; do
+            dotnet test --project "$project" --framework "${{ matrix.framework }}" --configuration Release -p:SkipSignAssembly=true --minimum-expected-tests 1
+          done
 
   test_windows:
     name: call-test-windows
@@ -142,8 +168,8 @@ jobs:
   test_qualitygate:
     if: ${{ always() }}
     name: test-qualitygate
-    needs: [init, test_linux, test_windows, test_mac]
-    runs-on: ubuntu-24.04
+    needs: [init, test_linux, test_windows, test_mac, test_frameworks]
+    runs-on: ubuntu-26.04
     steps:
       - name: Evaluate test results
         shell: bash
@@ -152,6 +178,7 @@ jobs:
           TEST_LINUX_RESULT: ${{ needs.test_linux.result }}
           TEST_WINDOWS_RESULT: ${{ needs.test_windows.result }}
           TEST_MAC_RESULT: ${{ needs.test_mac.result }}
+          TEST_FRAMEWORKS_RESULT: ${{ needs.test_frameworks.result }}
         run: |
           require_success() {
             local job_name="$1"
@@ -181,6 +208,7 @@ jobs:
 
           require_success "test_linux" "$TEST_LINUX_RESULT"
           require_success "test_windows" "$TEST_WINDOWS_RESULT"
+          require_success "test_frameworks" "$TEST_FRAMEWORKS_RESULT"
           require_success_or_skip "test_mac" "$RUN_MAC_TESTS" "$TEST_MAC_RESULT"
 
   sonarcloud:
