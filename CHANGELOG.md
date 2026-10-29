@@ -4,6 +4,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [6.0.0] - 2026-11-10
+
+This is a major release that drops the `net9.0` target framework and adds `net11.0`, with updated package versions, the SonarAnalyzer.CSharp analyzer, and removal of the benchmark prompt file.
+
+### Added
+
+- SonarAnalyzer.CSharp 10.35.0.4138 as an analyzer package reference with `PrivateAssets="all"`,
+- `net11.0` target framework in the project files, with Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting
+
+### Changed
+
+- Project target frameworks from `net10.0;net9.0` to `net11.0;net10.0`,
+- Cuemon.Core and Cuemon.Extensions.Hosting from 10.8.1 to 10.8.2, Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1, and Microsoft.Testing.Extensions.HangDump from 2.5.1 to 2.5.2,
+- Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting from 10.0.13 to 10.0.14 for `net10.0`,
+- Package README descriptions now mention `.NET 10` and `.NET 11`.
+
+### Removed
+
+- `net9.0` target framework and its Microsoft.AspNetCore and Microsoft.Extensions package versions from the central package versions,
+- `.github/prompts/benchmark.prompt.md`.
+
 ## [5.2.3] - 2026-10-18
 
 This patch release updates dependencies, aligns MTP coverage and hang diagnostics with the shared CI workflow, and refreshes documentation hosting and contributor guidance.
@@ -332,6 +353,7 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner,
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application.
 
+[6.0.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.3...v6.0.0
 [5.2.3]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.2...v5.2.3
 [5.2.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.1...v5.2.2
 [5.2.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.0...v5.2.1
