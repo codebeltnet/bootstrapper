@@ -6,23 +6,28 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [6.0.0] - 2026-11-10
 
-This is a major release that drops the `net9.0` target framework and adds `net11.0`, with updated package versions, the SonarAnalyzer.CSharp analyzer, and removal of the benchmark prompt file.
+This is a major release that adds .NET 11 support and removes .NET 9 support, updates dependencies, and refreshes build and test infrastructure.
 
 ### Added
 
-- SonarAnalyzer.CSharp 10.35.0.4138 as an analyzer package reference with `PrivateAssets="all"`,
-- `net11.0` target framework in the project files, with Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting
+- SonarAnalyzer.CSharp 10.35.0.4138 as a private analyzer for non-test projects,
+- `net11.0` targets for libraries and tests, with corresponding preview Microsoft.AspNetCore and Microsoft.Extensions package declarations.
 
 ### Changed
 
-- Project target frameworks from `net10.0;net9.0` to `net11.0;net10.0`,
+- Library and test target frameworks from `net10.0;net9.0` to `net11.0;net10.0`,
 - Cuemon.Core and Cuemon.Extensions.Hosting from 10.8.1 to 10.8.2, Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1, and Microsoft.Testing.Extensions.HangDump from 2.5.1 to 2.5.2,
 - Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting from 10.0.13 to 10.0.14 for `net10.0`,
-- Package README descriptions now mention `.NET 10` and `.NET 11`.
+- Source, test, and sample C# namespaces to file-scoped declarations, and updated EditorConfig to require that style,
+- Linux CI jobs to Ubuntu 26.04 and enabled preview SDKs in the build, pack, test, SonarCloud, and CodeQL workflows,
+- Test environments to separate .NET 10 and .NET 11 Docker runners and Ubuntu 26.04 for WSL,
+- Service-update version selection to retain a newer planned release and validate its date,
+- DocFX nginx caching so successful fingerprinted assets can be cached while unsuccessful responses are not,
+- Package availability notes, contributor guidance, and the tracked `.bot/README.md` to reflect the current repository setup.
 
 ### Removed
 
-- `net9.0` target framework and its Microsoft.AspNetCore and Microsoft.Extensions package versions from the central package versions,
+- `net9.0` support and the corresponding conditional Microsoft.AspNetCore and Microsoft.Extensions package version declarations,
 - `.github/prompts/benchmark.prompt.md`.
 
 ## [5.2.3] - 2026-10-18
