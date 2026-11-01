@@ -39,7 +39,7 @@ foreach ($project in $testProjects) {
 }
 ```
 
-The CI test plan currently runs **6** test projects. The release gate requires successful tests for both target frameworks, along with the Linux and Windows matrices. The workflow also has an optional macOS test job.
+The CI test plan currently runs **6** test projects on both target frameworks in the Linux and Windows matrices. The workflow also has an optional macOS test job.
 
 ## Integration and infrastructure
 
