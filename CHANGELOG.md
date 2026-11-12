@@ -4,21 +4,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
-## [6.0.0] - 2026-11-10
+## [6.0.0] - 2026-11-12
 
 This major release adds .NET 11 support, removes .NET 9 targets, and updates dependencies and test infrastructure.
 
 ### Added
 
 - .NET 11 targets for the libraries and tests,
-- `SonarAnalyzer.CSharp` 10.35.0.4138 as a private analyzer for non-test projects.
+- `SonarAnalyzer.CSharp` 10.36.0.15337 as a private analyzer for non-test projects.
 
 ### Changed
 
-- Updated `Cuemon.Core` and `Cuemon.Extensions.Hosting` from 10.8.1 to 10.8.2, `Codebelt.Coverlet.MTP` from 10.1.0 to 10.1.1, and `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.2,
-- Updated the .NET 10 declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting` from 10.0.13 to 10.0.14, with corresponding .NET 11 preview declarations,
-- Enabled preview SDK provisioning, moved Linux CI jobs to Ubuntu 26.04, and split Docker test runners by .NET 10 and .NET 11,
+- Updated `Cuemon.Core` and `Cuemon.Extensions.Hosting` from 10.8.1 to 11.0.0, `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Codebelt.Extensions.Swashbuckle.AspNetCore` from 10.3.0 to 11.0.0, and `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0,
+- Updated `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3, and `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
+- Updated the .NET 10 declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting` from 10.0.13 to 10.0.15; added .NET 11 declarations at 11.0.0 for all five packages,
+- Moved Linux CI jobs to Ubuntu 26.04 and split Docker test runners by .NET 10 and .NET 11,
 - Service-update automation retains planned releases and validates release dates,
+- Updated and pinned the Scorecard workflow actions to their upstream release commits,
 - Updated package availability and contributor guidance for the supported frameworks and test environments,
 - Fingerprinted documentation assets use immutable caching for successful and 304 responses, no-store for errors, and full responses instead of ranges.
 
