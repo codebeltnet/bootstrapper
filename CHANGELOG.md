@@ -6,28 +6,28 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [6.0.0] - 2026-11-12
 
-This major release adds .NET 11 support, removes .NET 9 targets, and updates dependencies and test infrastructure.
+This major release adds .NET 11 support, drops .NET 9 support, updates the .NET and test dependency baselines, and refreshes the CI, documentation hosting, and release automation workflows.
 
 ### Added
 
-- .NET 11 targets for the libraries and tests,
+- .NET 11 targets for libraries and tests, with corresponding .NET 11 package declarations,
 - `SonarAnalyzer.CSharp` 10.36.0.15337 as a private analyzer for non-test projects.
 
 ### Changed
 
 - Updated `Cuemon.Core` and `Cuemon.Extensions.Hosting` from 10.8.1 to 11.0.0, `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Codebelt.Extensions.Swashbuckle.AspNetCore` from 10.3.0 to 11.0.0, and `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0,
 - Updated `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3, and `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
-- Updated the .NET 10 declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting` from 10.0.13 to 10.0.15; added .NET 11 declarations at 11.0.0 for all five packages,
-- Moved Linux CI jobs to Ubuntu 26.04 and split Docker test runners by .NET 10 and .NET 11,
-- Service-update automation retains planned releases and validates release dates,
-- Updated and pinned the Scorecard workflow actions to their upstream release commits,
+- Updated the .NET 10 declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting` from 10.0.13 to 10.0.15; added .NET 11 declarations at 11.0.0 for those packages,
+- Moved Linux CI jobs to Ubuntu 26.04 and configured separate Docker test environments for .NET 10 and .NET 11,
+- Updated service-update automation to retain explicitly planned versions, validate release dates, and update existing matching changelog sections,
+- Pinned Scorecard workflow actions to upstream release commits,
 - Updated package availability and contributor guidance for the supported frameworks and test environments,
-- Fingerprinted documentation assets use immutable caching for successful and 304 responses, no-store for errors, and full responses instead of ranges.
+- Configured immutable caching for successful and 304 fingerprinted documentation asset responses, no-store for errors, and complete responses without byte ranges.
 
 ### Removed
 
 - The .NET 9 library and test targets; consumers must target .NET 10 or later,
-- The .NET 9 conditional declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting`; those packages remain declared for supported frameworks,
+- The .NET 9 conditional version declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting`,
 - The repository's benchmark prompt.
 
 ## [5.2.3] - 2026-10-18
