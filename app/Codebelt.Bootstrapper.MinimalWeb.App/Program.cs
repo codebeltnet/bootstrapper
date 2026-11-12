@@ -1,32 +1,31 @@
 using Codebelt.Bootstrapper.Web;
 using Cuemon.Extensions.Hosting;
 
-namespace Codebelt.Bootstrapper.MinimalWeb.App
+namespace Codebelt.Bootstrapper.MinimalWeb.App;
+
+public class Program : MinimalWebProgram
 {
-    public class Program : MinimalWebProgram
+    static Task Main(string[] args)
     {
-        static Task Main(string[] args)
+        var builder = CreateHostBuilder(args);
+
+        var app = builder.Build();
+
+        if (app.Environment.IsLocalDevelopment())
         {
-            var builder = CreateHostBuilder(args);
-
-            var app = builder.Build();
-
-            if (app.Environment.IsLocalDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
-
-            return app.RunAsync();
+            app.UseDeveloperExceptionPage();
         }
+
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapGet("/", async context =>
+            {
+                await context.Response.WriteAsync("Hello World!");
+            });
+        });
+
+        return app.RunAsync();
     }
 }

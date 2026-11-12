@@ -1,4 +1,4 @@
-﻿using Cuemon;
+using Cuemon;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,120 +7,119 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
-namespace Codebelt.Bootstrapper.Console
+namespace Codebelt.Bootstrapper.Console;
+
+/// <summary>
+/// Provides a console application that is managed by its host.
+/// </summary>
+/// <typeparam name ="TStartup">The type containing the startup methods for the application.</typeparam>
+/// <seealso cref="IHostedService" />
+public class ConsoleHostedService<TStartup> : IHostedService where TStartup : ConsoleStartup
 {
+    private readonly IStartupFactory<TStartup> _factory;
+    private readonly IHostApplicationLifetime _applicationLifetime;
+    private readonly IServiceProvider _provider;
+    private ILogger<TStartup> _logger;
+    private bool _ranToCompletion;
+    private Task _runAsyncTask;
+    private readonly IHostLifetimeEvents _events;
+    private readonly bool _suppressStatusMessages;
+
     /// <summary>
-    /// Provides a console application that is managed by its host.
+    /// Initializes a new instance of the <see cref="ConsoleHostedService{TStartup}" /> class.
     /// </summary>
-    /// <typeparam name ="TStartup">The type containing the startup methods for the application.</typeparam>
-    /// <seealso cref="IHostedService" />
-    public class ConsoleHostedService<TStartup> : IHostedService where TStartup : ConsoleStartup
+    /// <param name="factory">The dependency injected <see cref="IStartupFactory{TStartup}" />.</param>
+    /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime" />.</param>
+    /// <param name="provider">The dependency injected <see cref="IServiceProvider" />.</param>
+    /// <param name="events">The dependency injected <see cref="IHostLifetimeEvents"/>.</param>
+    public ConsoleHostedService(IStartupFactory<TStartup> factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider, IHostLifetimeEvents events)
     {
-        private readonly IStartupFactory<TStartup> _factory;
-        private readonly IHostApplicationLifetime _applicationLifetime;
-        private readonly IServiceProvider _provider;
-        private ILogger<TStartup> _logger;
-        private bool _ranToCompletion;
-        private Task _runAsyncTask;
-        private readonly IHostLifetimeEvents _events;
-        private readonly bool _suppressStatusMessages;
+        _factory = factory;
+        _applicationLifetime = applicationLifetime;
+        _provider = provider;
+        _events = events;
+        _suppressStatusMessages = provider.GetService<IOptions<ConsoleLifetimeOptions>>()?.Value.SuppressStatusMessages ?? false;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConsoleHostedService{TStartup}" /> class.
-        /// </summary>
-        /// <param name="factory">The dependency injected <see cref="IStartupFactory{TStartup}" />.</param>
-        /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime" />.</param>
-        /// <param name="provider">The dependency injected <see cref="IServiceProvider" />.</param>
-        /// <param name="events">The dependency injected <see cref="IHostLifetimeEvents"/>.</param>
-        public ConsoleHostedService(IStartupFactory<TStartup> factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider, IHostLifetimeEvents events)
+    /// <summary>
+    /// Triggered when the application host is ready to start the service.
+    /// </summary>
+    /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
+    /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _logger = _provider.GetRequiredService<ILogger<TStartup>>();
+        TStartup startup = _factory.Instance;
+        if (startup != null)
         {
-            _factory = factory;
-            _applicationLifetime = applicationLifetime;
-            _provider = provider;
-            _events = events;
-            _suppressStatusMessages = provider.GetService<IOptions<ConsoleLifetimeOptions>>()?.Value.SuppressStatusMessages ?? false;
+            startup.ConfigureConsole(_provider);
+            _events.OnApplicationStartedCallback += () => StartRunAsync(startup, cancellationToken);
+        }
+        else
+        {
+            LogUnableToActivate(typeof(TStartup).FullName);
         }
 
-        /// <summary>
-        /// Triggered when the application host is ready to start the service.
-        /// </summary>
-        /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger = _provider.GetRequiredService<ILogger<TStartup>>();
-            TStartup startup = _factory.Instance;
-            if (startup != null)
-            {
-                startup.ConfigureConsole(_provider);
-                _events.OnApplicationStartedCallback += () => StartRunAsync(startup, cancellationToken);
-            }
-            else
-            {
-                LogUnableToActivate(typeof(TStartup).FullName);
-            }
+        return Task.CompletedTask;
+    }
 
-            return Task.CompletedTask;
+    private void StartRunAsync(TStartup startup, CancellationToken cancellationToken)
+    {
+        _runAsyncTask = Task.Run(() => RunAsync(startup, cancellationToken), cancellationToken);
+        _ = StartWaitForCompletionOfRunAsync();
+    }
+
+    private async Task RunAsync(TStartup startup, CancellationToken cancellationToken)
+    {
+        try
+        {
+            LogRunAsyncStarted();
+            await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
+            _ranToCompletion = true;
+        }
+        catch (Exception e)
+        {
+            LogFatalError(typeof(TStartup).FullName, e);
+        }
+    }
+
+    private void LogRunAsyncStarted()
+    {
+        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
+    }
+
+    private void LogUnableToActivate(string typeFullName)
+    {
+        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeFullName); }
+    }
+
+    private void LogFatalError(string typeFullName, Exception exception)
+    {
+        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeFullName, exception); }
+    }
+
+    private async Task StartWaitForCompletionOfRunAsync()
+    {
+        await _runAsyncTask.ConfigureAwait(false);
+        _applicationLifetime.StopApplication();
+    }
+
+    /// <summary>
+    /// Triggered when the application host is performing a graceful shutdown.
+    /// </summary>
+    /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
+    /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (!_ranToCompletion)
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd(); }
+        }
+        else
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted(); }
         }
 
-        private void StartRunAsync(TStartup startup, CancellationToken cancellationToken)
-        {
-            _runAsyncTask = Task.Run(() => RunAsync(startup, cancellationToken), cancellationToken);
-            _ = StartWaitForCompletionOfRunAsync();
-        }
-
-        private async Task RunAsync(TStartup startup, CancellationToken cancellationToken)
-        {
-            try
-            {
-                LogRunAsyncStarted();
-                await startup.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
-                _ranToCompletion = true;
-            }
-            catch (Exception e)
-            {
-                LogFatalError(typeof(TStartup).FullName, e);
-            }
-        }
-
-        private void LogRunAsyncStarted()
-        {
-            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
-        }
-
-        private void LogUnableToActivate(string typeFullName)
-        {
-            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeFullName); }
-        }
-
-        private void LogFatalError(string typeFullName, Exception exception)
-        {
-            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeFullName, exception); }
-        }
-
-        private async Task StartWaitForCompletionOfRunAsync()
-        {
-            await _runAsyncTask.ConfigureAwait(false);
-            _applicationLifetime.StopApplication();
-        }
-
-        /// <summary>
-        /// Triggered when the application host is performing a graceful shutdown.
-        /// </summary>
-        /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (!_ranToCompletion)
-            {
-                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd(); }
-            }
-            else
-            {
-                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted(); }
-            }
-
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

@@ -4,6 +4,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 For more details, please refer to `PackageReleaseNotes.txt` on a per assembly basis in the `.nuget` folder.
 
+## [6.0.0] - 2026-11-12
+
+This major release adds .NET 11 support, drops .NET 9 support, updates the .NET and test dependency baselines, and refreshes the CI, documentation hosting, and release automation workflows.
+
+### Added
+
+- .NET 11 targets for libraries and tests, with corresponding .NET 11 package declarations,
+- `SonarAnalyzer.CSharp` 10.36.0.15337 as a private analyzer for non-test projects.
+
+### Changed
+
+- Updated `Cuemon.Core` and `Cuemon.Extensions.Hosting` from 10.8.1 to 11.0.0, `Codebelt.Coverlet.MTP` from 10.1.0 to 11.0.0, `Codebelt.Extensions.Swashbuckle.AspNetCore` from 10.3.0 to 11.0.0, and `Codebelt.Extensions.Xunit.App` from 12.0.2 to 13.0.0,
+- Updated `Microsoft.NET.Test.Sdk` from 18.11.0 to 18.12.0, `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.3, and `xunit.v3` and `xunit.v3.runner.console` from 4.0.2 to 4.0.3,
+- Updated the .NET 10 declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting` from 10.0.13 to 10.0.15; added .NET 11 declarations at 11.0.0 for those packages,
+- Moved Linux CI jobs to Ubuntu 26.04 and configured separate Docker test environments for .NET 10 and .NET 11,
+- Updated service-update automation to retain explicitly planned versions, validate release dates, and update existing matching changelog sections,
+- Pinned Scorecard workflow actions to upstream release commits,
+- Updated package availability and contributor guidance for the supported frameworks and test environments,
+- Configured immutable caching for successful and 304 fingerprinted documentation asset responses, no-store for errors, and complete responses without byte ranges.
+
+### Removed
+
+- The .NET 9 library and test targets; consumers must target .NET 10 or later,
+- The .NET 9 conditional version declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting`,
+- The repository's benchmark prompt.
+
 ## [5.2.3] - 2026-10-18
 
 This patch release updates dependencies, aligns MTP coverage and hang diagnostics with the shared CI workflow, and refreshes documentation hosting and contributor guidance.
@@ -332,6 +358,7 @@ Highlighted features included in this release:
 - WorkerProgram class in the Codebelt.Bootstrapper.Worker namespace that is the base entry point of an application responsible for registering its WorkerStartup partner,
 - WorkerStartup interface in the Codebelt.Bootstrapper.Worker namespace that provides the base class of a conventional based Startup class for a console application.
 
+[6.0.0]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.3...v6.0.0
 [5.2.3]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.2...v5.2.3
 [5.2.2]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.1...v5.2.2
 [5.2.1]: https://github.com/codebeltnet/bootstrapper/compare/v5.2.0...v5.2.1

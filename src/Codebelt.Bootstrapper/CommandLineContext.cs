@@ -1,4 +1,4 @@
-﻿namespace Codebelt.Bootstrapper;
+namespace Codebelt.Bootstrapper;
 
 /// <summary>
 /// Represents the command-line arguments available to a bootstrapper.

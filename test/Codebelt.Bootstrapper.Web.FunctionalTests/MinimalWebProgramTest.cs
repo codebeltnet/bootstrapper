@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Codebelt.Extensions.Xunit;
 using Codebelt.Extensions.Xunit.Hosting;
 using Codebelt.Extensions.Xunit.Hosting.AspNetCore;
@@ -7,44 +7,43 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 
-namespace Codebelt.Bootstrapper.Web
+namespace Codebelt.Bootstrapper.Web;
+
+public class MinimalWebProgramTest : Test
 {
-    public class MinimalWebProgramTest : Test
+    public MinimalWebProgramTest(ITestOutputHelper output) : base(output)
     {
-        public MinimalWebProgramTest(ITestOutputHelper output) : base(output)
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ShouldSimulateAMinimalWebApplication()
+    {
+        using var test = await MinimalWebHostTestFactory.RunWithHostBuilderContextAsync((context, services) =>
         {
-        }
-
-        [Fact]
-        public async Task ExecuteAsync_ShouldSimulateAMinimalWebApplication()
+            services.AddXunitTestLogging(TestOutput);
+        }, (context, app) =>
         {
-            using var test = await MinimalWebHostTestFactory.RunWithHostBuilderContextAsync((context, services) => 
+            if (context.HostingEnvironment.IsLocalDevelopment())
             {
-                services.AddXunitTestLogging(TestOutput);
-            }, (context, app) =>
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                if (context.HostingEnvironment.IsLocalDevelopment())
+                endpoints.MapGet("/", async context =>
                 {
-                    app.UseDeveloperExceptionPage();
-                }
-
-                app.UseRouting();
-
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapGet("/", async context =>
-                    {
-                        await context.Response.WriteAsync("Hello World!");
-                    });
+                    await context.Response.WriteAsync("Hello World!");
                 });
-            }, hb =>
-            {
-                hb.UseBootstrapperLifetime();
             });
+        }, hb =>
+        {
+            hb.UseBootstrapperLifetime();
+        });
 
-            var helloWorld = await test.Content.ReadAsStringAsync();
+        var helloWorld = await test.Content.ReadAsStringAsync();
 
-            Assert.Equal("Hello World!", helloWorld);
-        }
+        Assert.Equal("Hello World!", helloWorld);
     }
 }

@@ -7,7 +7,7 @@
 
 An open-source family of assemblies (MIT license) that provide a uniform and consistent way of bootstraping your code with Program.cs paired with Startup.cs -OR- using the new `Minimal` equivalent for all project types.
 
-Your versatile Bootstrapper companion for modern development with `.NET 9` and `.NET 10`.
+Your versatile Bootstrapper companion for modern development with `.NET 10` and `.NET 11`.
 
 It is, by heart, free, flexible and built to extend and boost your agile codebelt.
 

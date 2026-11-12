@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,125 +7,124 @@ using System.Threading.Tasks;
 using Cuemon;
 using Microsoft.Extensions.Options;
 
-namespace Codebelt.Bootstrapper.Console
+namespace Codebelt.Bootstrapper.Console;
+
+/// <summary>
+/// Provides a console application that is managed by its host.
+/// </summary>
+/// <seealso cref="IHostedService" />
+public class MinimalConsoleHostedService : IHostedService
 {
+    private readonly IProgramFactory _factory;
+    private readonly IHostApplicationLifetime _applicationLifetime;
+    private readonly IServiceProvider _provider;
+    private ILogger _logger;
+    private bool _ranToCompletion;
+    private Task _runAsyncTask;
+    private readonly IHostLifetimeEvents _events;
+    private readonly bool _suppressStatusMessages;
+
     /// <summary>
-    /// Provides a console application that is managed by its host.
+    /// Initializes a new instance of the <see cref="MinimalConsoleHostedService"/> class.
     /// </summary>
-    /// <seealso cref="IHostedService" />
-    public class MinimalConsoleHostedService : IHostedService
+    /// <param name="factory">The dependency injected <see cref="IProgramFactory"/>.</param>
+    /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime"/>.</param>
+    /// <param name="provider">The dependency injected <see cref="IServiceProvider"/>.</param>
+    /// <param name="events">The dependency injected <see cref="IHostLifetimeEvents"/>.</param>
+    public MinimalConsoleHostedService(IProgramFactory factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider, IHostLifetimeEvents events)
     {
-        private readonly IProgramFactory _factory;
-        private readonly IHostApplicationLifetime _applicationLifetime;
-        private readonly IServiceProvider _provider;
-        private ILogger _logger;
-        private bool _ranToCompletion;
-        private Task _runAsyncTask;
-        private readonly IHostLifetimeEvents _events;
-        private readonly bool _suppressStatusMessages;
+        _factory = factory;
+        _applicationLifetime = applicationLifetime;
+        _provider = provider;
+        _events = events;
+        _suppressStatusMessages = provider.GetService<IOptions<ConsoleLifetimeOptions>>()?.Value.SuppressStatusMessages ?? false;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MinimalConsoleHostedService"/> class.
-        /// </summary>
-        /// <param name="factory">The dependency injected <see cref="IProgramFactory"/>.</param>
-        /// <param name="applicationLifetime">The dependency injected <see cref="IHostApplicationLifetime"/>.</param>
-        /// <param name="provider">The dependency injected <see cref="IServiceProvider"/>.</param>
-        /// <param name="events">The dependency injected <see cref="IHostLifetimeEvents"/>.</param>
-        public MinimalConsoleHostedService(IProgramFactory factory, IHostApplicationLifetime applicationLifetime, IServiceProvider provider, IHostLifetimeEvents events)
+    /// <summary>
+    /// Triggered when the application host is ready to start the service.
+    /// </summary>
+    /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
+    /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _events.OnApplicationStartedCallback += () => StartRunAsync(cancellationToken);
+
+        return Task.CompletedTask;
+    }
+
+    private void StartRunAsync(CancellationToken cancellationToken)
+    {
+        MinimalConsoleProgram program = _factory.Instance;
+        Type programType = program?.GetType() ?? typeof(MinimalConsoleProgram);
+
+        _logger = ResolveLogger(programType);
+        _runAsyncTask = Task.Run(() => RunAsync(program, programType, cancellationToken), cancellationToken);
+        _ = StartWaitForCompletionOfRunAsync();
+    }
+
+    private ILogger ResolveLogger(Type programType)
+    {
+        Type loggerType = typeof(ILogger<>).MakeGenericType(programType);
+        return _provider.GetRequiredService(loggerType) as ILogger;
+    }
+
+    private async Task RunAsync(MinimalConsoleProgram program, Type programType, CancellationToken cancellationToken)
+    {
+        try
         {
-            _factory = factory;
-            _applicationLifetime = applicationLifetime;
-            _provider = provider;
-            _events = events;
-            _suppressStatusMessages = provider.GetService<IOptions<ConsoleLifetimeOptions>>()?.Value.SuppressStatusMessages ?? false;
-        }
-
-        /// <summary>
-        /// Triggered when the application host is ready to start the service.
-        /// </summary>
-        /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _events.OnApplicationStartedCallback += () => StartRunAsync(cancellationToken);
-
-            return Task.CompletedTask;
-        }
-
-        private void StartRunAsync(CancellationToken cancellationToken)
-        {
-            MinimalConsoleProgram program = _factory.Instance;
-            Type programType = program?.GetType() ?? typeof(MinimalConsoleProgram);
-
-            _logger = ResolveLogger(programType);
-            _runAsyncTask = Task.Run(() => RunAsync(program, programType, cancellationToken), cancellationToken);
-            _ = StartWaitForCompletionOfRunAsync();
-        }
-
-        private ILogger ResolveLogger(Type programType)
-        {
-            Type loggerType = typeof(ILogger<>).MakeGenericType(programType);
-            return _provider.GetRequiredService(loggerType) as ILogger;
-        }
-
-        private async Task RunAsync(MinimalConsoleProgram program, Type programType, CancellationToken cancellationToken)
-        {
-            try
+            if (program == null)
             {
-                if (program == null)
-                {
-                    LogUnableToActivate(programType.FullName);
-                    return;
-                }
-
-                LogRunAsyncStarted();
-                await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
-                _ranToCompletion = true;
-            }
-            catch (Exception e)
-            {
-                LogFatalError(programType.FullName, e);
-            }
-        }
-
-        private void LogRunAsyncStarted()
-        {
-            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
-        }
-
-        private void LogUnableToActivate(string typeFullName)
-        {
-            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeFullName); }
-        }
-
-        private void LogFatalError(string typeFullName, Exception exception)
-        {
-            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeFullName, exception); }
-        }
-
-        private async Task StartWaitForCompletionOfRunAsync()
-        {
-            await _runAsyncTask.ConfigureAwait(false);
-            _applicationLifetime.StopApplication();
-        }
-
-        /// <summary>
-        /// Triggered when the application host is performing a graceful shutdown.
-        /// </summary>
-        /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-        /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            if (!_ranToCompletion)
-            {
-                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd(); }
-            }
-            else
-            {
-                if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted(); }
+                LogUnableToActivate(programType.FullName);
+                return;
             }
 
-            return Task.CompletedTask;
+            LogRunAsyncStarted();
+            await program.RunAsync(_provider, cancellationToken).ConfigureAwait(false);
+            _ranToCompletion = true;
         }
+        catch (Exception e)
+        {
+            LogFatalError(programType.FullName, e);
+        }
+    }
+
+    private void LogRunAsyncStarted()
+    {
+        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).RunAsyncStarted(); }
+    }
+
+    private void LogUnableToActivate(string typeFullName)
+    {
+        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).UnableToActivateInstance(typeFullName); }
+    }
+
+    private void LogFatalError(string typeFullName, Exception exception)
+    {
+        if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false).FatalErrorActivating(typeFullName, exception); }
+    }
+
+    private async Task StartWaitForCompletionOfRunAsync()
+    {
+        await _runAsyncTask.ConfigureAwait(false);
+        _applicationLifetime.StopApplication();
+    }
+
+    /// <summary>
+    /// Triggered when the application host is performing a graceful shutdown.
+    /// </summary>
+    /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
+    /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (!_ranToCompletion)
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncPrematureEnd(); }
+        }
+        else
+        {
+            if (!_suppressStatusMessages) { Decorator.EncloseToExpose(_logger, false)?.RunAsyncCompleted(); }
+        }
+
+        return Task.CompletedTask;
     }
 }

@@ -1,7 +1,6 @@
-namespace Codebelt.Bootstrapper.Console.Assets
+namespace Codebelt.Bootstrapper.Console.Assets;
+
+public class NullStartupFactory<TStartup> : global::Codebelt.Bootstrapper.IStartupFactory<TStartup> where TStartup : global::Codebelt.Bootstrapper.StartupRoot
 {
-    public class NullStartupFactory<TStartup> : global::Codebelt.Bootstrapper.IStartupFactory<TStartup> where TStartup : global::Codebelt.Bootstrapper.StartupRoot
-    {
-        public TStartup Instance => null;
-    }
+    public TStartup Instance => null;
 }

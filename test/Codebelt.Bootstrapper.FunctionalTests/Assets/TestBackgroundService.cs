@@ -1,46 +1,45 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Codebelt.Bootstrapper.Assets
+namespace Codebelt.Bootstrapper.Assets;
+
+public class TestBackgroundService : BackgroundService
 {
-    public class TestBackgroundService : BackgroundService
+    private readonly ILogger<TestBackgroundService> _logger;
+    private readonly IHostLifetimeEvents _events;
+    private readonly Stopwatch _stopwatch;
+
+    public TestBackgroundService(ILogger<TestBackgroundService> logger, IHostLifetimeEvents events, IHostApplicationLifetime applicationLifetime)
     {
-        private readonly ILogger<TestBackgroundService> _logger;
-        private readonly IHostLifetimeEvents _events;
-        private readonly Stopwatch _stopwatch;
+        _logger = logger;
+        _events = events;
+        _stopwatch = Stopwatch.StartNew();
 
-        public TestBackgroundService(ILogger<TestBackgroundService> logger, IHostLifetimeEvents events, IHostApplicationLifetime applicationLifetime)
+        _events.OnApplicationStartedCallback += () =>
         {
-            _logger = logger;
-            _events = events;
-            _stopwatch = Stopwatch.StartNew();
+            _logger.LogInformation("TestBackgroundService started after {Elapsed}", Elapsed);
+            applicationLifetime.StopApplication();
+        };
+    }
 
-            _events.OnApplicationStartedCallback += () =>
-            {
-                _logger.LogInformation("TestBackgroundService started after {Elapsed}", Elapsed);
-                applicationLifetime.StopApplication();
-            };
-        }
-
-        public TimeSpan Elapsed { get; private set; } = TimeSpan.Zero;
+    public TimeSpan Elapsed { get; private set; } = TimeSpan.Zero;
 
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                try
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1), stoppingToken).ConfigureAwait(false);
-                }
-                finally
-                {
-                    Elapsed = _stopwatch.Elapsed;
-                }
+                await Task.Delay(TimeSpan.FromMilliseconds(1), stoppingToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                Elapsed = _stopwatch.Elapsed;
             }
         }
     }

@@ -8,73 +8,72 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Xunit;
 
-namespace Codebelt.Bootstrapper
+namespace Codebelt.Bootstrapper;
+
+public class StartupRootTest : Test
 {
-    public class StartupRootTest : Test
+    private readonly IConfiguration _configuration;
+    private readonly IHostEnvironment _environment;
+
+    public StartupRootTest(ITestOutputHelper output) : base(output)
     {
-        private readonly IConfiguration _configuration;
-        private readonly IHostEnvironment _environment;
+        var inMemorySettings = new Dictionary<string, string> {
+            {"TestKey", "TestValue"}
+        };
 
-        public StartupRootTest(ITestOutputHelper output) : base(output)
+        _configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemorySettings)
+            .Build();
+
+        _environment = new HostingEnvironment()
         {
-            var inMemorySettings = new Dictionary<string, string> {
-                {"TestKey", "TestValue"}
-            };
+            EnvironmentName = Environments.Development,
+            ApplicationName = "TestApp",
+            ContentRootPath = Directory.GetCurrentDirectory()
+        };
+    }
 
-            _configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
+    [Fact]
+    public void ConfigurationProperty_ShouldReturnInjectedConfiguration()
+    {
+        // Arrange
+        var startup = new TestStartupRoot(_configuration, _environment);
 
-            _environment = new HostingEnvironment()
-            {
-                EnvironmentName = Environments.Development,
-                ApplicationName = "TestApp",
-                ContentRootPath = Directory.GetCurrentDirectory()
-            };
-        }
+        // Act
+        var configuration = StartupRootUnsafeAccessor.GetConfiguration(startup);
 
-        [Fact]
-        public void ConfigurationProperty_ShouldReturnInjectedConfiguration()
-        {
-            // Arrange
-            var startup = new TestStartupRoot(_configuration, _environment);
-
-            // Act
-            var configuration = StartupRootUnsafeAccessor.GetConfiguration(startup);
-
-            // Assert
-            Assert.Equal(_configuration, configuration);
-        }
+        // Assert
+        Assert.Equal(_configuration, configuration);
+    }
 
 
 
-        [Fact]
-        public void EnvironmentProperty_ShouldReturnInjectedEnvironment()
-        {
-            // Arrange
-            var startup = new TestStartupRoot(_configuration, _environment);
+    [Fact]
+    public void EnvironmentProperty_ShouldReturnInjectedEnvironment()
+    {
+        // Arrange
+        var startup = new TestStartupRoot(_configuration, _environment);
 
-            // Act
-            var environment = StartupRootUnsafeAccessor.GetEnvironment(startup);
+        // Act
+        var environment = StartupRootUnsafeAccessor.GetEnvironment(startup);
 
-            // Assert
-            Assert.Equal(_environment, environment);
-        }
+        // Assert
+        Assert.Equal(_environment, environment);
+    }
 
-        [Fact]
-        public void ConfigureServices_ShouldAddServicesToServiceCollection()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            var startup = new TestStartupRoot(_configuration, _environment);
+    [Fact]
+    public void ConfigureServices_ShouldAddServicesToServiceCollection()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var startup = new TestStartupRoot(_configuration, _environment);
 
-            // Act
-            startup.ConfigureServices(services);
-            var serviceProvider = services.BuildServiceProvider();
-            var testService = serviceProvider.GetService<string>();
+        // Act
+        startup.ConfigureServices(services);
+        var serviceProvider = services.BuildServiceProvider();
+        var testService = serviceProvider.GetService<string>();
 
-            // Assert
-            Assert.Equal("TestService", testService);
-        }
+        // Assert
+        Assert.Equal("TestService", testService);
     }
 }
