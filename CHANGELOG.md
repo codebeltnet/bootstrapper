@@ -6,29 +6,27 @@ For more details, please refer to `PackageReleaseNotes.txt` on a per assembly ba
 
 ## [6.0.0] - 2026-11-10
 
-This is a major release that adds .NET 11 support and removes .NET 9 support, updates dependencies, and refreshes build and test infrastructure.
+This major release adds .NET 11 support, removes .NET 9 targets, and updates dependencies and test infrastructure.
 
 ### Added
 
-- SonarAnalyzer.CSharp 10.35.0.4138 as a private analyzer for non-test projects,
-- `net11.0` targets for libraries and tests, with corresponding preview Microsoft.AspNetCore and Microsoft.Extensions package declarations.
+- .NET 11 targets for the libraries and tests,
+- `SonarAnalyzer.CSharp` 10.35.0.4138 as a private analyzer for non-test projects.
 
 ### Changed
 
-- Library and test target frameworks from `net10.0;net9.0` to `net11.0;net10.0`,
-- Cuemon.Core and Cuemon.Extensions.Hosting from 10.8.1 to 10.8.2, Codebelt.Coverlet.MTP from 10.1.0 to 10.1.1, and Microsoft.Testing.Extensions.HangDump from 2.5.1 to 2.5.2,
-- Microsoft.AspNetCore.OpenApi, Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation, Microsoft.Extensions.Configuration, Microsoft.Extensions.DependencyInjection.Abstractions, and Microsoft.Extensions.Hosting from 10.0.13 to 10.0.14 for `net10.0`,
-- Source, test, and sample C# namespaces to file-scoped declarations, and updated EditorConfig to require that style,
-- Linux CI jobs to Ubuntu 26.04 and enabled preview SDKs in the build, pack, test, SonarCloud, and CodeQL workflows,
-- Test environments to separate .NET 10 and .NET 11 Docker runners and Ubuntu 26.04 for WSL,
-- Service-update version selection to retain a newer planned release and validate its date,
-- DocFX nginx caching so successful fingerprinted assets can be cached while unsuccessful responses are not,
-- Package availability notes, contributor guidance, and the tracked `.bot/README.md` to reflect the current repository setup.
+- Updated `Cuemon.Core` and `Cuemon.Extensions.Hosting` from 10.8.1 to 10.8.2, `Codebelt.Coverlet.MTP` from 10.1.0 to 10.1.1, and `Microsoft.Testing.Extensions.HangDump` from 2.5.1 to 2.5.2,
+- Updated the .NET 10 declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting` from 10.0.13 to 10.0.14, with corresponding .NET 11 preview declarations,
+- Enabled preview SDK provisioning, moved Linux CI jobs to Ubuntu 26.04, and split Docker test runners by .NET 10 and .NET 11,
+- Service-update automation retains planned releases and validates release dates,
+- Updated package availability and contributor guidance for the supported frameworks and test environments,
+- Fingerprinted documentation assets use immutable caching for successful and 304 responses, no-store for errors, and full responses instead of ranges.
 
 ### Removed
 
-- `net9.0` support and the corresponding conditional Microsoft.AspNetCore and Microsoft.Extensions package version declarations,
-- `.github/prompts/benchmark.prompt.md`.
+- The .NET 9 library and test targets; consumers must target .NET 10 or later,
+- The .NET 9 conditional declarations for `Microsoft.AspNetCore.OpenApi`, `Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation`, `Microsoft.Extensions.Configuration`, `Microsoft.Extensions.DependencyInjection.Abstractions`, and `Microsoft.Extensions.Hosting`; those packages remain declared for supported frameworks,
+- The repository's benchmark prompt.
 
 ## [5.2.3] - 2026-10-18
 
